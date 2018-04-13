@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TQR</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_report">Report Submission</string>
+    <string name="take_photo_button">Capture Photos</string>
+    <string name="description_prompt">How do you rate the overall quality of this infrastructure?</string>
+    <string name="description_label">Description</string>
+    <string name="submit_report_label">Submit</string>
+    <string name="type_here">type here</string>
+    <string name="image_view_description">images just taken by the camera</string>
+</resources>
