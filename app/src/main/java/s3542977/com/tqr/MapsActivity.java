@@ -3,6 +3,8 @@ package s3542977.com.tqr;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
@@ -69,9 +71,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         System.out.println(lastKnownLocation.getLatitude()+" "+ lastKnownLocation.getLongitude());
         Log.i("Test", "Location " + lastKnownLocation.getLatitude()+ " "+ lastKnownLocation.getLongitude());
 
-
         LatLng currentLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        addMarkers();
+    }
+
+    private void addMarkers(){
+        SQLiteDatabase mydatabase = openOrCreateDatabase("database", MODE_PRIVATE, null);
+        Cursor resultSet = mydatabase.rawQuery("Select * from InfrastructureQuality", null);
+//        if (!resultSet.moveToFirst())
+//            return;
+        resultSet.moveToFirst();
+
+        LatLng latLng;
+        do {
+            latLng = new LatLng(resultSet.getDouble(1), resultSet.getDouble(0));
+            Log.i("log", String.valueOf(latLng.longitude));
+            Log.i("lat", String.valueOf(latLng.latitude));
+
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data"));
+
+        } while (resultSet.moveToNext());
     }
 }

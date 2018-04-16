@@ -99,10 +99,9 @@ public class ReportActivity extends AppCompatActivity {
     public void submitReport(View view) {
         String description = descriptionText.getText().toString();
 
-        String query = "INSERT INTO InfrastructureQuality VALUES(" + latitude + "," + longitude + "," + quality + ", '" + description + "');";
-
         SQLiteDatabase mydatabase = openOrCreateDatabase("database", MODE_PRIVATE, null);
         mydatabase.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5), Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
+        String query = "INSERT INTO InfrastructureQuality VALUES(" + latitude + "," + longitude + "," + quality + ", '" + description + "');";
         mydatabase.execSQL(query);
 
         Cursor resultSet = mydatabase.rawQuery("Select * from InfrastructureQuality", null);

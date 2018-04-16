@@ -49,7 +49,9 @@
             android:name=".ReportActivity"
             android:label="@string/title_activity_report"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".DatabaseViewer"></activity>
+        <activity
+            android:name=".DatabaseViewer"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

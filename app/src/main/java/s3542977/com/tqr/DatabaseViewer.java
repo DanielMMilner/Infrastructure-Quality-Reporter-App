@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class DatabaseViewer extends AppCompatActivity {
     Cursor resultSet;
     String text;
@@ -58,5 +60,23 @@ public class DatabaseViewer extends AppCompatActivity {
             resultSet.moveToFirst();
         }
         setText();
+    }
+
+    public void addRandomData(View view){
+        Random generator = new Random();
+        double lat;
+        double log;
+        int quality;
+        SQLiteDatabase mydatabase = openOrCreateDatabase("database", MODE_PRIVATE, null);
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5), Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
+        String query;
+
+        for(int i = 0; i < 10; i++){
+            log = generator.nextDouble() * .47 - 38;
+            lat = generator.nextDouble() * .93 + 144.5;
+            quality = generator.nextInt(101);
+            query = "INSERT INTO InfrastructureQuality VALUES(" + lat + "," + log + "," + quality + ", '" + "Dummy data" + "');";
+            mydatabase.execSQL(query);
+        }
     }
 }
