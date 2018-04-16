@@ -45,9 +45,11 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ReportActivity"
+        <activity
+            android:name=".ReportActivity"
             android:label="@string/title_activity_report"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".DatabaseViewer"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -69,12 +68,12 @@ public class ReportActivity extends AppCompatActivity {
             Log.i("Test", "No ACCESS_FINE_LOCATION Permission");
             return;
         }
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.i("Test", "No ACCESS_COARSE_LOCATION Permission");
             return;
         }
 
-        if(locationManager == null)
+        if (locationManager == null)
             Log.i("Test", "Location manager is null");
 
         assert locationManager != null;
@@ -90,32 +89,31 @@ public class ReportActivity extends AppCompatActivity {
         textView.setText(text);
     }
 
-    public void takePhoto(View view){
+    public void takePhoto(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    public void submitReport(View view){
+    public void submitReport(View view) {
         String description = descriptionText.getText().toString();
 
-        String query = "INSERT INTO InfrastructureQuality VALUES("+latitude+","+longitude+","+ quality+", '"+ description+"');";
+        String query = "INSERT INTO InfrastructureQuality VALUES(" + latitude + "," + longitude + "," + quality + ", '" + description + "');";
 
-        SQLiteDatabase mydatabase = openOrCreateDatabase("database",MODE_PRIVATE,null);
-//        mydatabase.execSQL("DROP TABLE InfrastructureQuality;");
+        SQLiteDatabase mydatabase = openOrCreateDatabase("database", MODE_PRIVATE, null);
         mydatabase.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5), Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
         mydatabase.execSQL(query);
 
-        Cursor resultSet = mydatabase.rawQuery("Select * from InfrastructureQuality",null);
+        Cursor resultSet = mydatabase.rawQuery("Select * from InfrastructureQuality", null);
         resultSet.moveToFirst();
         Log.i("databaseThing", query);
 
-        do{
+        do {
             Log.i("databaseThing latitude", resultSet.getString(0));
             Log.i("databaseThing longitude", resultSet.getString(1));
             Log.i("databaseThing quality", resultSet.getString(2));
             Log.i("databaseThing desc", resultSet.getString(3));
-        }while (resultSet.moveToNext());
+        } while (resultSet.moveToNext());
     }
 }
