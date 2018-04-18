@@ -16,10 +16,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
+    private ArrayList<WeightedLatLng> weightedLatLngList;
+    private ArrayList<LatLng> latLngList;
 
     DatabaseHandler databaseHandler;
 
@@ -32,6 +39,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         databaseHandler = new DatabaseHandler(this);
+        latLngList = new ArrayList<>();
+        weightedLatLngList = new ArrayList<>();
     }
 
     @Override
@@ -59,22 +68,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         LatLng currentLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
 
-        addMarkers();
+        getLatLngCoordinates();
+
+//        addMarkers();
+
+        addHeatMap();
+    }
+
+    private void getLatLngCoordinates() {
+        if (databaseHandler.isDatabaseEmpty())
+            return;
+        do {
+            LatLng latLng = new LatLng(databaseHandler.getLatitudeAsDouble(),
+                    databaseHandler.getLongitudeAsDouble());
+            double weighting = 100 - databaseHandler.getQualityAsDouble();
+            WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, weighting);
+
+            latLngList.add(latLng);
+            weightedLatLngList.add(weightedLatLng);
+        } while (databaseHandler.hasNext());
     }
 
     private void addMarkers() {
-        if (databaseHandler.isDatabaseEmpty())
-            return;
-        LatLng latLng;
-        while (!databaseHandler.isLastRow()) {
-            latLng = new LatLng(databaseHandler.getLongitudeAsDouble(),
-                    databaseHandler.getLatitudeAsDouble());
-
+        for (LatLng latLng : latLngList) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data"));
-            databaseHandler.nextRow();
         }
+    }
+
+    private void addHeatMap() {
+        if (weightedLatLngList.isEmpty())
+            return;
+        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
+        TileOverlay mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
     }
 }

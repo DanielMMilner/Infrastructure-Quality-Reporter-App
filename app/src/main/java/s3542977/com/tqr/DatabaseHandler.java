@@ -10,15 +10,18 @@ import java.util.Random;
 import static android.content.Context.MODE_PRIVATE;
 
 public class DatabaseHandler {
-    private Context context;
+    private static final int LATITUDE_COLUMN = 0;
+    private static final int LONGITUDE_COLUMN = 1;
+    private static final int QUALITY_COLUMN = 2;
+    private static final int DESCRIPTION_COLUMN = 3;
+
     private SQLiteDatabase database;
     private Cursor resultSet;
 
     DatabaseHandler(Context context) {
-        this.context = context;
         database = context.openOrCreateDatabase("database", MODE_PRIVATE, null);
         Log.i("Database", "CREATING DB");
-        database.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5),"+
+        database.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5)," +
                 " Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
         Log.i("Database", "GETTING DB");
         resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
@@ -32,8 +35,8 @@ public class DatabaseHandler {
 
     public void generateRandomEntry() {
         Random generator = new Random();
-        double log = generator.nextDouble() * .47 - 38;
-        double lat = generator.nextDouble() * .93 + 144.5;
+        double lat = generator.nextDouble() * .47 - 38;
+        double log = generator.nextDouble() * .93 + 144.5;
         int quality = generator.nextInt(101);
         String query = "INSERT INTO InfrastructureQuality VALUES(" + lat + "," + log + "," +
                 quality + ", 'Dummy data');";
@@ -46,37 +49,41 @@ public class DatabaseHandler {
         resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
     }
 
-    public void nextRow(){
-        if (!resultSet.isLast()) {
-            resultSet.moveToNext();
-        } else {
+    public boolean hasNext() {
+        if (resultSet.isLast()) {
             resultSet.moveToFirst();
+            return false;
+        } else {
+            resultSet.moveToNext();
+            return true;
         }
     }
 
-    public boolean isLastRow(){
-        return resultSet.isLast();
+    public String getLatitudeAsString() {
+        return resultSet.getString(LATITUDE_COLUMN);
     }
 
-    public String getLatitudeAsString() {
-        return resultSet.getString(0);
-    }
     public double getLatitudeAsDouble() {
-        return resultSet.getDouble(0);
+        return resultSet.getDouble(LATITUDE_COLUMN);
     }
 
     public String getLongitudeAsString() {
-        return resultSet.getString(1);
-    }
-    public double getLongitudeAsDouble() {
-        return resultSet.getDouble(1);
+        return resultSet.getString(LONGITUDE_COLUMN);
     }
 
-    public String getQuality() {
-        return resultSet.getString(2);
+    public double getLongitudeAsDouble() {
+        return resultSet.getDouble(LONGITUDE_COLUMN);
+    }
+
+    public String getQualityAsString() {
+        return resultSet.getString(QUALITY_COLUMN);
+    }
+
+    public double getQualityAsDouble() {
+        return resultSet.getDouble(QUALITY_COLUMN);
     }
 
     public String getDescription() {
-        return resultSet.getString(3);
+        return resultSet.getString(DESCRIPTION_COLUMN);
     }
 }

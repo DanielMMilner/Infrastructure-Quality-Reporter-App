@@ -45,7 +45,7 @@ public class DatabaseViewer extends AppCompatActivity {
         Log.i("Database", "NOT EMPTY");
         text = "latitude: " + databaseHandler.getLatitudeAsString() +
                 "\nlongitude " + databaseHandler.getLongitudeAsString() +
-                "\nquality " + databaseHandler.getQuality() +
+                "\nquality " + databaseHandler.getQualityAsString() +
                 "\ndescription " + databaseHandler.getDescription();
         nextRowButton.setEnabled(true);
 
@@ -53,7 +53,7 @@ public class DatabaseViewer extends AppCompatActivity {
     }
 
     public void nextRow(View view) {
-        databaseHandler.nextRow();
+        databaseHandler.hasNext();
         setText();
     }
 
