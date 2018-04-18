@@ -43,8 +43,8 @@ public class DatabaseViewer extends AppCompatActivity {
 
     private void setText() {
         Log.i("Database", "NOT EMPTY");
-        text = "latitude: " + databaseHandler.getLatitude() +
-                "\nlongitude " + databaseHandler.getLongitude() +
+        text = "latitude: " + databaseHandler.getLatitudeAsString() +
+                "\nlongitude " + databaseHandler.getLongitudeAsString() +
                 "\nquality " + databaseHandler.getQuality() +
                 "\ndescription " + databaseHandler.getDescription();
         nextRowButton.setEnabled(true);

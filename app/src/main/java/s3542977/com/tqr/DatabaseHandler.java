@@ -54,12 +54,22 @@ public class DatabaseHandler {
         }
     }
 
-    public String getLatitude() {
-        return resultSet.getString(0);
+    public boolean isLastRow(){
+        return resultSet.isLast();
     }
 
-    public String getLongitude() {
+    public String getLatitudeAsString() {
+        return resultSet.getString(0);
+    }
+    public double getLatitudeAsDouble() {
+        return resultSet.getDouble(0);
+    }
+
+    public String getLongitudeAsString() {
         return resultSet.getString(1);
+    }
+    public double getLongitudeAsDouble() {
+        return resultSet.getDouble(1);
     }
 
     public String getQuality() {
