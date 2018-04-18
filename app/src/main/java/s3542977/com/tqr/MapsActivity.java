@@ -79,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void addMarkers(){
         SQLiteDatabase mydatabase = openOrCreateDatabase("database", MODE_PRIVATE, null);
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5), Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
+
         Cursor resultSet = mydatabase.rawQuery("Select * from InfrastructureQuality", null);
 //        if (!resultSet.moveToFirst())
 //            return;
