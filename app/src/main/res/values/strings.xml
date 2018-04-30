@@ -23,4 +23,8 @@
     <string name="send">Send</string>
     <string name="markers">Markers</string>
     <string name="heatmap">Heat map</string>
+    <string name="speed_test">Speed Test</string>
+    <string name="_50mb_test">50MB Test</string>
+    <string name="_100mb_test">100MB Test</string>
+    <string name="_500mb_test">500MB Test</string>
 </resources>
