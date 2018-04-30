@@ -7,9 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -32,6 +31,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<WeightedLatLng> weightedLatLngList;
     private ArrayList<LatLng> latLngList;
     private TileOverlay mOverlay;
+    private ArrayList<Marker> markers;
 
     DatabaseHandler databaseHandler;
 
@@ -39,6 +39,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        markers = new ArrayList<>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -132,7 +134,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void removeMarkers() {
-        mMap.clear();
+        for (Marker marker: markers) {
+            marker.remove();
+        }
     }
 
     private void removeHeatMap() {
@@ -141,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void addMarkers() {
         for (LatLng latLng : latLngList) {
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data"));
+            markers.add(mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data")));
         }
     }
 
