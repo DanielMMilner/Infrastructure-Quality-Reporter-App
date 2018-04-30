@@ -14,4 +14,13 @@
     <string name="submit_report_label">Submit</string>
     <string name="type_here">type here</string>
     <string name="image_view_description">images just taken by the camera</string>
+    <string name="camera">Take Photo</string>
+    <string name="map">Map</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="view_database">View Database</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="markers">Markers</string>
+    <string name="heatmap">Heat map</string>
 </resources>

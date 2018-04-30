@@ -21,9 +21,9 @@ public class DatabaseHandler {
 
     DatabaseHandler(Context context) {
         database = context.openOrCreateDatabase("database", MODE_PRIVATE, null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5)," +
+        database.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQualitys(Latitude NUMERIC(10,5)," +
                 " Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR, ImageFilePath VARCHAR);");
-        resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
+        resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
     public boolean isDatabaseEmpty() {
@@ -38,20 +38,20 @@ public class DatabaseHandler {
         String description = "Dummy Data";
         String imageFilePath = "";
 
-        addEntry(lat,log, quality, description, imageFilePath);
+        addEntry(lat, log, quality, description, imageFilePath);
     }
 
-    public void addEntry(double lat, double log, int quality, String description, String imageFilePath){
-        String query = "INSERT INTO InfrastructureQuality VALUES(" + lat + "," + log + "," +
+    public void addEntry(double lat, double log, int quality, String description, String imageFilePath) {
+        String query = "INSERT INTO InfrastructureQualitys VALUES(" + lat + "," + log + "," +
                 quality + ",'" + description + "','" + imageFilePath + "');";
 
         database.execSQL(query);
-        resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
+        resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
     public void clearDatabase() {
-        database.execSQL("delete from InfrastructureQuality;");
-        resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
+        database.execSQL("delete from InfrastructureQualitys;");
+        resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
     public boolean hasNext() {

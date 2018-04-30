@@ -54,7 +54,9 @@
         <activity
             android:name=".DatabaseViewer"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SpeedTestActivity"></activity>
+        <activity
+            android:name=".SpeedTestActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
