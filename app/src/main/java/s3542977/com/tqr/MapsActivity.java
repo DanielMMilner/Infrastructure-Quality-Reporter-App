@@ -115,6 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         LatLng currentLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         getLatLngCoordinates();
     }
@@ -135,24 +136,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void removeMarkers() {
         for (Marker marker: markers) {
-            marker.remove();
+            marker.setVisible(false);
         }
     }
 
     private void removeHeatMap() {
-        mOverlay.remove();
+        mOverlay.setVisible(false);
     }
 
     private void addMarkers() {
-        for (LatLng latLng : latLngList) {
-            markers.add(mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data")));
+        if(markers.isEmpty()){
+            for (LatLng latLng : latLngList) {
+                markers.add(mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data")));
+            }
+        }else{
+            for (Marker marker: markers) {
+                marker.setVisible(true);
+            }
         }
     }
 
     private void addHeatMap() {
-        if (weightedLatLngList.isEmpty())
-            return;
-        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
-        mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        if(mOverlay == null){
+            if (weightedLatLngList.isEmpty())
+                return;
+            HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
+            mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        }else{
+            mOverlay.setVisible(true);
+        }
     }
 }
