@@ -21,22 +21,19 @@
         android:id="@+id/dbText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="132dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/nextRowButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clearButton"
-        app:layout_constraintVertical_bias="0.098" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/nextRowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:onClick="nextRow"
@@ -58,4 +55,18 @@
         app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toEndOf="@+id/clearButton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/dbImage"
+        android:layout_width="0dp"
+        android:layout_height="237dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/dbText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/randomButton"
+        app:srcCompat="@android:drawable/btn_dialog" />
 </android.support.constraint.ConstraintLayout>

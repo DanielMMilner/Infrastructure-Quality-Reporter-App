@@ -1,14 +1,17 @@
 package s3542977.com.tqr;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -16,15 +19,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private String imagePath = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +39,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -93,10 +91,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+//            http://www.codexpedia.com/android/action_image_capture-intent-for-taking-image-in-android/
+            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File image = new File(storageDir.getAbsolutePath() + "/Camera/my_picture.jpg");
+            imagePath = image.getAbsolutePath();
+            Log.d("takePicture", "picture will be saved at: " + imagePath);
+
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
         } else if (id == R.id.nav_map) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
@@ -107,7 +111,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, DatabaseViewer.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent(this, SpeedTestActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
 
         }
@@ -127,15 +132,32 @@ public class MainActivity extends AppCompatActivity
                     MY_PERMISSIONS_REQUEST_LOCATION);
 
         }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1024);
+
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    0x4);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap myPictureBitmap = BitmapFactory.decodeFile(imagePath);
+            myPictureBitmap = Bitmap.createBitmap(myPictureBitmap);
             ImageView mImageView = findViewById(R.id.cameraPhoto);
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+            mImageView.setImageBitmap(myPictureBitmap);
         }
     }
 }

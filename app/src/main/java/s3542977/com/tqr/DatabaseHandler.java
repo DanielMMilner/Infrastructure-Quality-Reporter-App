@@ -3,7 +3,6 @@ package s3542977.com.tqr;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -14,22 +13,20 @@ public class DatabaseHandler {
     private static final int LONGITUDE_COLUMN = 1;
     private static final int QUALITY_COLUMN = 2;
     private static final int DESCRIPTION_COLUMN = 3;
+    private static final int IMAGE_FILE_PATH_COLUMN = 4;
+
 
     private SQLiteDatabase database;
     private Cursor resultSet;
 
     DatabaseHandler(Context context) {
         database = context.openOrCreateDatabase("database", MODE_PRIVATE, null);
-        Log.i("Database", "CREATING DB");
         database.execSQL("CREATE TABLE IF NOT EXISTS InfrastructureQuality(Latitude NUMERIC(10,5)," +
-                " Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR);");
-        Log.i("Database", "GETTING DB");
+                " Longitude NUMERIC(10,5), Quality NUMERIC, Description VARCHAR, ImageFilePath VARCHAR);");
         resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
-        Log.i("Database", "DB RETRIEVED");
     }
 
     public boolean isDatabaseEmpty() {
-        Log.i("Database", "MOVE TO FIRST");
         return !resultSet.moveToFirst();
     }
 
@@ -38,8 +35,16 @@ public class DatabaseHandler {
         double lat = generator.nextDouble() * .47 - 38;
         double log = generator.nextDouble() * .93 + 144.5;
         int quality = generator.nextInt(101);
+        String description = "Dummy Data";
+        String imageFilePath = "";
+
+        addEntry(lat,log, quality, description, imageFilePath);
+    }
+
+    public void addEntry(double lat, double log, int quality, String description, String imageFilePath){
         String query = "INSERT INTO InfrastructureQuality VALUES(" + lat + "," + log + "," +
-                quality + ", 'Dummy data');";
+                quality + ",'" + description + "','" + imageFilePath + "');";
+
         database.execSQL(query);
         resultSet = database.rawQuery("Select * from InfrastructureQuality", null);
     }
@@ -85,5 +90,9 @@ public class DatabaseHandler {
 
     public String getDescription() {
         return resultSet.getString(DESCRIPTION_COLUMN);
+    }
+
+    public String getImageFIlePath() {
+        return resultSet.getString(IMAGE_FILE_PATH_COLUMN);
     }
 }

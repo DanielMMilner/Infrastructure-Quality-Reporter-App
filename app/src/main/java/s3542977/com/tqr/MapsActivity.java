@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getLatLngCoordinates();
 
-//        addMarkers();
+        //addMarkers();
 
         addHeatMap();
     }
