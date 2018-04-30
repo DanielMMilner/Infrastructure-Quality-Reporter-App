@@ -8,7 +8,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,10 +27,11 @@ import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ArrayList<WeightedLatLng> weightedLatLngList;
     private ArrayList<LatLng> latLngList;
+    private TileOverlay mOverlay;
 
     DatabaseHandler databaseHandler;
 
@@ -34,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -41,6 +47,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         databaseHandler = new DatabaseHandler(this);
         latLngList = new ArrayList<>();
         weightedLatLngList = new ArrayList<>();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //https://developer.android.com/training/appbar/setting-up
+        getMenuInflater().inflate(R.menu.maps, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filters:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+            case R.id.action_toggle_heatMap:
+                if(item.isChecked()){
+                    removeHeatMap();
+                    item.setChecked(false);
+                }else{
+                    addHeatMap();
+                    item.setChecked(true);
+                }
+                return true;
+            case R.id.action_toggle_markers:
+                if(item.isChecked()){
+                    removeMarkers();
+                    item.setChecked(false);
+                }else{
+                    addMarkers();
+                    item.setChecked(true);
+                }
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -71,10 +115,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
 
         getLatLngCoordinates();
-
-        //addMarkers();
-
-        addHeatMap();
     }
 
     private void getLatLngCoordinates() {
@@ -91,6 +131,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } while (databaseHandler.hasNext());
     }
 
+    private void removeMarkers() {
+        mMap.clear();
+    }
+
+    private void removeHeatMap() {
+        mOverlay.remove();
+    }
+
     private void addMarkers() {
         for (LatLng latLng : latLngList) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data"));
@@ -101,6 +149,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (weightedLatLngList.isEmpty())
             return;
         HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
-        TileOverlay mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
     }
 }
