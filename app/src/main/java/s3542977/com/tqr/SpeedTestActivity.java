@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 
 public class SpeedTestActivity extends AppCompatActivity {
     private TextView textView;
@@ -45,9 +46,12 @@ public class SpeedTestActivity extends AppCompatActivity {
     public class SpeedTestDownload extends AsyncTask<String, String, String> {
         private long startTime;
         private long endTime;
-        private byte data[] = new byte[50000000];
         private long total = 0;
         private String temp = "";
+        int progress = 0;
+        private double seconds;
+        private double bits;
+        private double speed;
 
         /**
          * Before starting background thread Show Progress Bar Dialog
@@ -63,20 +67,27 @@ public class SpeedTestActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... f_url) {
             int count;
+            int progressUpdateCounter = 0;
             try {
+                byte data[] = new byte[131072];
                 URL url = new URL(f_url[0]);
                 URLConnection connection = url.openConnection();
                 connection.connect();
 
                 int lengthOfFile = connection.getContentLength();
+                BufferedInputStream input = new BufferedInputStream(connection.getInputStream());
 
                 startTime = System.currentTimeMillis();
-                InputStream input = new BufferedInputStream(url.openStream(), 50000000);
-
                 while ((count = input.read(data)) != -1) {
                     total += count;
-                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
+                    progress = (int) ((total * 100) / lengthOfFile);
+                    progressUpdateCounter++;
+                    if(progressUpdateCounter >= 50){
+                        publishProgress();
+                        progressUpdateCounter = 0;
+                    }
                 }
+                System.out.println(progressUpdateCounter);
                 endTime = System.currentTimeMillis();
 
                 input.close();
@@ -90,9 +101,8 @@ public class SpeedTestActivity extends AppCompatActivity {
         /**
          * Updating progress bar
          */
-        protected void onProgressUpdate(String... progress) {
-            speedTestProgress.setProgress(Integer.parseInt(progress[0]));
-            endTime = System.currentTimeMillis();
+        protected void onProgressUpdate(String... prog) {
+            speedTestProgress.setProgress(progress);
             setText();
         }
 
@@ -101,16 +111,17 @@ public class SpeedTestActivity extends AppCompatActivity {
          **/
         @Override
         protected void onPostExecute(String file_url) {
-            float seconds = (endTime - startTime)/1000;
-            float bits = total*8;
-            float speed = bits / seconds /1000000;
-            temp = "Downloaded " + total + " bytes in " + String.valueOf(endTime - startTime) + "ms\n Speed: " + speed + "Mbps";
-            textView.setText(temp);
-//            setText();
+            setText();
         }
 
         private void setText() {
-            temp = "Downloaded " + total + " bytes in " + String.valueOf(endTime - startTime) + "ms\n";
+            endTime = System.currentTimeMillis();
+            seconds = (endTime - startTime)/1000.0;
+            bits = total*8;
+            speed = bits / seconds /1000000;
+
+            temp = "Downloaded " + total + " bytes in " +
+                    String.valueOf(endTime - startTime) + "ms\n Speed: " + String.format(Locale.UK,"%.2f", speed) + "Mbps";
             textView.setText(temp);
         }
     }
