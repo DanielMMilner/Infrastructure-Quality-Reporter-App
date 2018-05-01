@@ -101,11 +101,16 @@ public class SpeedTestActivity extends AppCompatActivity {
          **/
         @Override
         protected void onPostExecute(String file_url) {
-            setText();
+            float seconds = (endTime - startTime)/1000;
+            float bits = total*8;
+            float speed = bits / seconds /1000000;
+            temp = "Downloaded " + total + " bytes in " + String.valueOf(endTime - startTime) + "ms\n Speed: " + speed + "Mbps";
+            textView.setText(temp);
+//            setText();
         }
 
         private void setText() {
-            temp = "Downloaded " + total + " bytes in " + String.valueOf(endTime - startTime) + "ms";
+            temp = "Downloaded " + total + " bytes in " + String.valueOf(endTime - startTime) + "ms\n";
             textView.setText(temp);
         }
     }

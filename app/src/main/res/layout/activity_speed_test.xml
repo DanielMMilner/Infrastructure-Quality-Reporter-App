@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/speedTestStatus"
         android:layout_width="258dp"
-        android:layout_height="29dp"
+        android:layout_height="39dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
