@@ -17,10 +17,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
@@ -31,7 +30,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<WeightedLatLng> weightedLatLngList;
     private ArrayList<LatLng> latLngList;
     private TileOverlay mOverlay;
-    private ArrayList<Marker> markers;
+    private ArrayList<MapMarkers> markers;
+    private ClusterManager<MapMarkers> mClusterManager;
 
     DatabaseHandler databaseHandler;
 
@@ -65,20 +65,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.action_toggle_heatMap:
-                if(item.isChecked()){
-                    removeHeatMap();
+                if (item.isChecked()) {
+                    mOverlay.setVisible(false);
                     item.setChecked(false);
-                }else{
-                    addHeatMap();
+                } else {
+                    mOverlay.setVisible(true);
                     item.setChecked(true);
                 }
                 return true;
             case R.id.action_toggle_markers:
-                if(item.isChecked()){
-                    removeMarkers();
+                if (item.isChecked()) {
+                    mClusterManager.clearItems();
                     item.setChecked(false);
-                }else{
-                    addMarkers();
+                } else {
+                    mClusterManager.addItems(markers);
                     item.setChecked(true);
                 }
                 return true;
@@ -118,6 +118,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         getLatLngCoordinates();
+
+        setUpMarkers();
+        setUpHeatMap();
+    }
+
+    private void setUpHeatMap() {
+        if (weightedLatLngList.isEmpty())
+            return;
+        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
+        mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        mOverlay.setVisible(false);
+    }
+
+    private void setUpMarkers() {
+        mClusterManager = new ClusterManager<>(this, mMap);
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+
+        for (LatLng latLng : latLngList) {
+            markers.add(new MapMarkers(latLng, "Dummy Data", "Dummy Snippet"));
+        }
     }
 
     private void getLatLngCoordinates() {
@@ -132,38 +153,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             latLngList.add(latLng);
             weightedLatLngList.add(weightedLatLng);
         } while (databaseHandler.hasNext());
-    }
-
-    private void removeMarkers() {
-        for (Marker marker: markers) {
-            marker.setVisible(false);
-        }
-    }
-
-    private void removeHeatMap() {
-        mOverlay.setVisible(false);
-    }
-
-    private void addMarkers() {
-        if(markers.isEmpty()){
-            for (LatLng latLng : latLngList) {
-                markers.add(mMap.addMarker(new MarkerOptions().position(latLng).title("Dummy Data")));
-            }
-        }else{
-            for (Marker marker: markers) {
-                marker.setVisible(true);
-            }
-        }
-    }
-
-    private void addHeatMap() {
-        if(mOverlay == null){
-            if (weightedLatLngList.isEmpty())
-                return;
-            HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngList).build();
-            mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-        }else{
-            mOverlay.setVisible(true);
-        }
     }
 }
