@@ -8,14 +8,115 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ImageView
-        android:id="@+id/cameraPhoto"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
+    <ImageButton
+        android:id="@+id/speedtestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/speed_test_button"
+        android:onClick="buttonPressed"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/mapButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reportButton"
+        app:srcCompat="@mipmap/ic_speed_test_foreground" />
+
+    <ImageButton
+        android:id="@+id/reportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/submit_report_button"
+        android:onClick="buttonPressed"
+        app:layout_constraintBottom_toTopOf="@+id/speedtestButton"
+        app:layout_constraintEnd_toStartOf="@+id/databaseButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/background_light" />
+        app:srcCompat="@mipmap/ic_report_foreground" />
+
+    <ImageButton
+        android:id="@+id/mapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/map_button"
+        android:onClick="buttonPressed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/speedtestButton"
+        app:layout_constraintTop_toBottomOf="@+id/databaseButton"
+        app:srcCompat="@mipmap/ic_map_foreground" />
+
+    <ImageButton
+        android:id="@+id/databaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/view_database_button"
+        android:onClick="buttonPressed"
+        app:layout_constraintBottom_toTopOf="@+id/mapButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reportButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_database_foreground" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/submit_report"
+        app:layout_constraintEnd_toEndOf="@+id/reportButton"
+        app:layout_constraintStart_toStartOf="@+id/reportButton"
+        app:layout_constraintTop_toBottomOf="@+id/reportButton" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/view_database"
+        app:layout_constraintEnd_toEndOf="@+id/databaseButton"
+        app:layout_constraintStart_toStartOf="@+id/databaseButton"
+        app:layout_constraintTop_toBottomOf="@+id/databaseButton" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/run_speed_test"
+        app:layout_constraintEnd_toEndOf="@+id/speedtestButton"
+        app:layout_constraintStart_toStartOf="@+id/speedtestButton"
+        app:layout_constraintTop_toBottomOf="@+id/speedtestButton" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/view_map"
+        app:layout_constraintEnd_toEndOf="@+id/mapButton"
+        app:layout_constraintStart_toStartOf="@+id/mapButton"
+        app:layout_constraintTop_toBottomOf="@+id/mapButton" />
 </android.support.constraint.ConstraintLayout>

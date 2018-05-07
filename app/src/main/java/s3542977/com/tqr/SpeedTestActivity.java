@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
 
-public class SpeedTestActivity extends AppCompatActivity {
+public class SpeedTestActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private TextView textView;
     private ProgressBar speedTestProgress;
+    private Spinner spinner;
+    int spinnerPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,23 +28,71 @@ public class SpeedTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_speed_test);
         textView = findViewById(R.id.speedTestStatus);
         speedTestProgress = findViewById(R.id.speedTestProgress);
+        spinner = findViewById(R.id.testSizeSpinner);
+        spinnerPosition = 0;
+
+        //https://developer.android.com/guide/topics/ui/controls/spinner
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.speed_test_sizes_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
-    public void runTest(View view) {
-        String file_url = "";
 
-        switch (view.getId()) {
-            case (R.id.test50MB):
-                file_url = "http://ftp.iinet.net.au/test50MB.dat";
+    public void runTest(View view) {
+        String file_url;
+
+        file_url = (String) spinner.getItemAtPosition(spinnerPosition);
+
+        switch (spinnerPosition) {
+            case 0:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_1MB";
                 break;
-            case (R.id.test100MB):
-                file_url = "http://ftp.iinet.net.au/test100MB.dat";
+            case 1:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_16MB";
                 break;
-            case (R.id.test500MB):
-                file_url = "http://ftp.iinet.net.au/test500MB.dat";
+            case 2:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_32MB";
+                break;
+            case 3:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_64MB";
+                break;
+            case 4:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_128MB";
+                break;
+            case 5:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_256MB";
+                break;
+            case 6:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_512MB";
+                break;
+            case 7:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_1024MB";
+                break;
+            case 8:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_2048MB";
+                break;
+            case 9:
+                file_url = "http://ftp.iinet.net.au/pub/speed/SpeedTest_4096MB";
                 break;
         }
+
         new SpeedTestDownload().execute(file_url);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        spinnerPosition = position;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     public class SpeedTestDownload extends AsyncTask<String, String, String> {
@@ -67,7 +119,6 @@ public class SpeedTestActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... f_url) {
             int count;
-            int progressUpdateCounter = 0;
             try {
                 byte data[] = new byte[131072];
                 URL url = new URL(f_url[0]);
@@ -77,21 +128,22 @@ public class SpeedTestActivity extends AppCompatActivity {
                 int lengthOfFile = connection.getContentLength();
                 BufferedInputStream input = new BufferedInputStream(connection.getInputStream());
 
+                long updateTimerStart = System.currentTimeMillis();
+                long updateTimerEnd;
+
                 startTime = System.currentTimeMillis();
                 while ((count = input.read(data)) != -1) {
                     total += count;
                     progress = (int) ((total * 100) / lengthOfFile);
-                    progressUpdateCounter++;
-                    if(progressUpdateCounter >= 50){
+                    updateTimerEnd = System.currentTimeMillis();
+                    if (updateTimerEnd - updateTimerStart > 50) {
+                        //update the progress every 50ms
+                        updateTimerStart = updateTimerEnd;
                         publishProgress();
-                        progressUpdateCounter = 0;
                     }
                 }
-                System.out.println(progressUpdateCounter);
-                endTime = System.currentTimeMillis();
-
+                publishProgress();
                 input.close();
-
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }
@@ -116,12 +168,12 @@ public class SpeedTestActivity extends AppCompatActivity {
 
         private void setText() {
             endTime = System.currentTimeMillis();
-            seconds = (endTime - startTime)/1000.0;
-            bits = total*8;
-            speed = bits / seconds /1000000;
+            seconds = (endTime - startTime) / 1000.0;
+            bits = total * 8;
+            speed = bits / seconds / 1000000;
 
-            temp = "Downloaded " + total + " bytes in " +
-                    String.valueOf(endTime - startTime) + "ms\n Speed: " + String.format(Locale.UK,"%.2f", speed) + "Mbps";
+            temp = "Downloaded " + total + " bytes \nTime: " +
+                    String.valueOf(endTime - startTime) + "ms\nSpeed: " + String.format(Locale.UK, "%.2f", speed) + "Mbps";
             textView.setText(temp);
         }
     }

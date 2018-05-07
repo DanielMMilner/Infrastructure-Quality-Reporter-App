@@ -8,24 +8,22 @@
 
     <TextView
         android:id="@+id/speedTestStatus"
-        android:layout_width="294dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="246dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/speedTestProgress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test100MB"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/speedTestProgress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="280dp"
         android:layout_height="22dp"
-        android:layout_marginBottom="136dp"
+        android:layout_marginBottom="80dp"
         android:layout_marginEnd="168dp"
         android:layout_marginStart="168dp"
         android:max="100"
@@ -34,44 +32,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/test50MB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:onClick="runTest"
-        android:text="@string/_50mb_test"
-        app:layout_constraintEnd_toStartOf="@+id/test100MB"
+    <Spinner
+        android:id="@+id/testSizeSpinner"
+        android:layout_width="241dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="112dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/test100MB"
+        android:id="@+id/runTestButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="31dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="21dp"
         android:onClick="runTest"
-        android:text="@string/_100mb_test"
-        app:layout_constraintEnd_toStartOf="@+id/test500MB"
-        app:layout_constraintStart_toEndOf="@+id/test50MB"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/test500MB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:onClick="runTest"
-        android:text="@string/_500mb_test"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toEndOf="@+id/test100MB"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/run_speed_test"
+        app:layout_constraintBottom_toTopOf="@+id/speedTestStatus"
+        app:layout_constraintEnd_toEndOf="@+id/testSizeSpinner"
+        app:layout_constraintStart_toStartOf="@+id/testSizeSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/testSizeSpinner"
+        app:layout_constraintVertical_bias="0.65" />
 
 </android.support.constraint.ConstraintLayout>

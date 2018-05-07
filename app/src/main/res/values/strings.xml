@@ -17,7 +17,6 @@
     <string name="camera">Take Photo</string>
     <string name="map">Map</string>
     <string name="submit_report">Submit Report</string>
-    <string name="view_database">View Database</string>
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="send">Send</string>
@@ -27,4 +26,29 @@
     <string name="_50mb_test">50MB Test</string>
     <string name="_100mb_test">100MB Test</string>
     <string name="_500mb_test">500MB Test</string>
+    <string name="speed_test_button">speed test button</string>
+    <string name="submit_report_button">Submit report button</string>
+    <string name="map_button">map button</string>
+    <string name="view_database_button">view database button</string>
+    <string name="run_speed_test">Run Speed Test</string>
+    <string name="view_map">View Map</string>
+    <string name="view_database">View Database</string>
+    <string-array name="speed_test_sizes_array">
+        <item>1MiB</item>
+        <item>16MiB</item>
+        <item>32MiB</item>
+        <item>64MiB</item>
+        <item>128MiB</item>
+        <item>256MiB</item>
+        <item>512MiB</item>
+        <item>1GiB</item>
+        <item>2GiB</item>
+        <item>4GiB</item>
+    </string-array>
+    <string-array name="search_database_array">
+        <item>Employees</item>
+        <item>Infrastructure</item>
+        <item>Reports</item>
+        <item>Types</item>
+    </string-array>
 </resources>

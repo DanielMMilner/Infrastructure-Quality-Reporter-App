@@ -115,6 +115,6 @@ public class ReportActivity extends AppCompatActivity {
 
     public void submitReport(View view) {
         String description = descriptionText.getText().toString();
-        databaseHandler.addEntry(latitude, longitude, quality, description, imageFilePath);
+//        databaseHandler.addEntry(latitude, longitude, quality, description, imageFilePath);
     }
 }

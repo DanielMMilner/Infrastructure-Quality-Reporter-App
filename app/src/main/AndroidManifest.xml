@@ -57,6 +57,12 @@
         <activity
             android:name=".SpeedTestActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SearchDatabaseActivity"
+            android:parentActivityName=".DatabaseViewer" />
+        <activity
+            android:name=".AddToDatabaseActivity"
+            android:parentActivityName=".DatabaseViewer"/>
     </application>
 
 </manifest>
