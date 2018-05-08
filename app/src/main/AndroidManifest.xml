@@ -62,7 +62,10 @@
             android:parentActivityName=".DatabaseViewer" />
         <activity
             android:name=".AddToDatabaseActivity"
-            android:parentActivityName=".DatabaseViewer"/>
+            android:parentActivityName=".DatabaseViewer" />
+        <activity
+            android:name=".DebugDatabaseActivity"
+            android:parentActivityName=".DatabaseViewer" />
     </application>
 
 </manifest>

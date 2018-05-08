@@ -35,6 +35,14 @@
     <string name="view_database">View Database</string>
     <string name="search">Search</string>
     <string name="or">Or</string>
+    <string name="debug">Debug</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
+    <string name="database_options">Database Options</string>
+    <string name="remove_icon">remove icon</string>
+    <string name="search_icon">search icon</string>
+    <string name="hazard_icon">hazard icon</string>
+    <string name="add_icon">Add icon</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

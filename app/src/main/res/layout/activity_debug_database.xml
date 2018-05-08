@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DebugDatabaseActivity">
+
+    <Button
+        android:id="@+id/addRandomReports10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="41dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="39dp"
+        android:onClick="buttonPressed"
+        android:text="Add 10 Reports"
+        app:layout_constraintEnd_toStartOf="@+id/addRandomReports100"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/clearTypes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="32dp"
+        android:onClick="buttonPressed"
+        android:text="Clear Types"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/clearInfrastructure"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/clearEmployees"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="32dp"
+        android:onClick="buttonPressed"
+        android:text="Clear Employees"
+        app:layout_constraintBottom_toTopOf="@+id/clearTypes"
+        app:layout_constraintEnd_toStartOf="@+id/clearReports"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/clearInfrastructure"
+        android:layout_width="189dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="buttonPressed"
+        android:text="clear infrastructure"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/clearReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="buttonPressed"
+        android:text="Clear Reports"
+        app:layout_constraintBottom_toTopOf="@+id/clearInfrastructure"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/addRandomReports100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="39dp"
+        android:onClick="buttonPressed"
+        android:text="add 100 Reports"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/addRandomInfrastructure10"
+        android:layout_width="148dp"
+        android:layout_height="59dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:onClick="buttonPressed"
+        android:text="add 10 Infrastructure"
+        app:layout_constraintEnd_toStartOf="@+id/addRandomeEmployees10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addRandomReports10" />
+
+    <Button
+        android:id="@+id/addRandomeEmployees10"
+        android:layout_width="136dp"
+        android:layout_height="59dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        android:onClick="buttonPressed"
+        android:text="add 10 Employees"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addRandomReports100" />
+</android.support.constraint.ConstraintLayout>
