@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RemoveFromDatabaseActivity">
+
+    <Spinner
+        android:id="@+id/typeSpinner3"
+        android:layout_width="215dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/removeFromDatabaseSpinner"
+        app:layout_constraintStart_toStartOf="@+id/removeFromDatabaseSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/removeFromDatabaseSpinner" />
+
+    <EditText
+        android:id="@+id/idOption"
+        android:layout_width="241dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/enter_id"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/removeFromDatabaseSpinner"
+        app:layout_constraintStart_toStartOf="@+id/removeFromDatabaseSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/removeFromDatabaseSpinner" />
+
+    <Spinner
+        android:id="@+id/removeFromDatabaseSpinner"
+        android:layout_width="309dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/removeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="132dp"
+        android:onClick="buttonPressed"
+        android:text="@string/remove"
+        app:layout_constraintEnd_toEndOf="@+id/idOption"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/idOption"
+        app:layout_constraintTop_toBottomOf="@+id/idOption" />
+
+    <TextView
+        android:id="@+id/removeResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/removeButton"
+        app:layout_constraintEnd_toEndOf="@+id/idOption"
+        app:layout_constraintStart_toStartOf="@+id/idOption"
+        app:layout_constraintTop_toBottomOf="@+id/idOption" />
+</android.support.constraint.ConstraintLayout>

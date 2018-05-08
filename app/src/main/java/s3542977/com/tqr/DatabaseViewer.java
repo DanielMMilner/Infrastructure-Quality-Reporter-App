@@ -35,7 +35,7 @@ public class DatabaseViewer extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.removeButton:
-                intent = new Intent(this, ReportActivity.class);
+                intent = new Intent(this, RemoveFromDatabaseActivity.class);
                 startActivity(intent);
                 break;
             case R.id.searchButton:

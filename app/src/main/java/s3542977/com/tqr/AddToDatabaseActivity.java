@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +18,10 @@ import java.util.Map;
 public class AddToDatabaseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private EditText firstOption;
     private EditText secondOption;
-    private Spinner tableSpinner;
     private Spinner typeSpinner;
-    int tableSpinnerPosition;
-    int typeSpinnerPosition;
-    DatabaseHandler databaseHandler;
+    private TextView addResultText;
+    private int tableSpinnerPosition;
+    private DatabaseHandler databaseHandler;
 
     private static final int EMPLOYEES = 0;
     private static final int INFRASTRUCTURE = 1;
@@ -35,7 +35,9 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
         firstOption = findViewById(R.id.firstOption2);
         secondOption = findViewById(R.id.secondOption2);
 
-        tableSpinner = findViewById(R.id.addToDatabaseSpinner);
+        addResultText = findViewById(R.id.addResultText);
+
+        Spinner tableSpinner = findViewById(R.id.addToDatabaseSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.search_database_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -56,8 +58,6 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             tableSpinnerPosition = position;
             clearOptions();
             setOptions();
-        }else {
-            typeSpinnerPosition = position;
         }
     }
 
@@ -67,6 +67,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
     private void clearOptions() {
         firstOption.setText("");
         secondOption.setText("");
+        addResultText.setText("");
     }
 
     private void setOptions() {
@@ -110,6 +111,11 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
 
+            if(firstOptionText.isEmpty() || secondOptionText.isEmpty()){
+                addResultText.setText(R.string.addToDatabaseError);
+                return;
+            }
+
             options.put("Name", firstOptionText);
             options.put("Phone", secondOptionText);
         }else if(tableSpinnerPosition == INFRASTRUCTURE){
@@ -117,14 +123,28 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             secondOptionText = String.valueOf(secondOption.getText());
             String type = typeSpinner.getSelectedItem().toString();
 
+            if(firstOptionText.isEmpty() || secondOptionText.isEmpty()){
+                addResultText.setText(R.string.addToDatabaseError);
+                return;
+            }
+
             options.put("Latitude", firstOptionText);
             options.put("Longitude", secondOptionText);
             options.put("idType", type);
         }else if(tableSpinnerPosition == TYPES){
             firstOptionText = String.valueOf(firstOption.getText());
 
+            if(firstOptionText.isEmpty()){
+                addResultText.setText(R.string.addToDatabaseError);
+                return;
+            }
+
             options.put("idType", firstOptionText);
         }
+
+        clearOptions();
+
+        addResultText.setText(R.string.addToDatabse);
 
         databaseHandler.addEntry(tableSpinnerPosition, options);
     }

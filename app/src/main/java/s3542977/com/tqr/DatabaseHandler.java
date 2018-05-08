@@ -212,6 +212,24 @@ public class DatabaseHandler {
         database.execSQL("delete from " + table + ";");
     }
 
+    public Boolean removeEntry(int tableID, String id) {
+        String table = getTableName(tableID);
+        String idName;
+        if (tableID == EMPLOYEES) {
+            idName = "idEmployee";
+        } else if (tableID == INFRASTRUCTURE) {
+            idName = "idInfrastructure";
+        } else if (tableID == REPORTS) {
+            idName = "idReports";
+        } else if (tableID == TYPES) {
+            idName = "idType";
+            return database.delete(table, idName + " LIKE '" + id + "'", null) > 0;
+        } else {
+            return false;
+        }
+        return database.delete(table, idName + "=" + id, null) > 0;
+    }
+
     public void generateRandomEntries(int tableID, int amount) {
         if (tableID == REPORTS) {
             Random generator = new Random();

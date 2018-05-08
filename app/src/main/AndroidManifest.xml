@@ -66,6 +66,9 @@
         <activity
             android:name=".DebugDatabaseActivity"
             android:parentActivityName=".DatabaseViewer" />
+        <activity
+            android:name=".RemoveFromDatabaseActivity"
+            android:parentActivityName=".DatabaseViewer" />
     </application>
 
 </manifest>

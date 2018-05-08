@@ -36,13 +36,19 @@
     <string name="search">Search</string>
     <string name="or">Or</string>
     <string name="debug">Debug</string>
-    <string name="remove">Remove</string>
     <string name="add">Add</string>
     <string name="database_options">Database Options</string>
     <string name="remove_icon">remove icon</string>
     <string name="search_icon">search icon</string>
     <string name="hazard_icon">hazard icon</string>
     <string name="add_icon">Add icon</string>
+    <string name="addToDatabaseError">All fields must be filled.</string>
+    <string name="addToDatabse">Added to Database</string>
+    <string name="enterAnId">Enter and ID first</string>
+    <string name="removeFailed">Removed failed. No entry with that ID found.</string>
+    <string name="removeSuccess">Successfully removed</string>
+    <string name="enter_id">Enter ID</string>
+    <string name="remove">Remove</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>
