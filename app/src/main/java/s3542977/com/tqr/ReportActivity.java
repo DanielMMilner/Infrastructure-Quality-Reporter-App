@@ -89,13 +89,15 @@ public class ReportActivity extends AppCompatActivity {
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
 
-        latitude = lastKnownLocation.getLatitude();
-        longitude = lastKnownLocation.getLongitude();
+        if(lastKnownLocation != null){
+            latitude = lastKnownLocation.getLatitude();
+            longitude = lastKnownLocation.getLongitude();
 
-        TextView textView = findViewById(R.id.locationText);
-        String text = "Current Location:\nLatitude: " + latitude +
-                "\nLongitude: " + longitude;
-        textView.setText(text);
+            TextView textView = findViewById(R.id.locationText);
+            String text = "Current Location:\nLatitude: " + latitude +
+                    "\nLongitude: " + longitude;
+            textView.setText(text);
+        }
     }
 
     public void takePhoto(View view) {

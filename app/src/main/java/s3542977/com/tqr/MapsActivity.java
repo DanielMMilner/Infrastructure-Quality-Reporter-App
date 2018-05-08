@@ -142,7 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void getLatLngCoordinates() {
-        if (databaseHandler.isDatabaseEmpty())
+        if (databaseHandler.isResultEmpty())
             return;
         do {
             LatLng latLng = new LatLng(databaseHandler.getLatitudeAsDouble(),

@@ -1,21 +1,29 @@
 package s3542977.com.tqr;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchDatabaseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class SearchDatabaseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private EditText firstOption;
     private EditText secondOption;
     private EditText thirdOption;
-    private Spinner spinner;
+    private TextView resultsText;
+    private TextView firstOr;
+    private TextView secondOr;
+    private Spinner typeSpinner;
+
     int spinnerPosition;
     private static final int EMPLOYEES = 0;
     private static final int INFRASTRUCTURE = 1;
@@ -32,12 +40,20 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         secondOption = findViewById(R.id.secondOption);
         thirdOption = findViewById(R.id.thirdOption);
 
-        spinner = findViewById(R.id.searchDatabaseSpinner);
+        resultsText = findViewById(R.id.resultsText);
+        resultsText.setMovementMethod(new ScrollingMovementMethod());
+
+        firstOr = findViewById(R.id.firstOr);
+        secondOr = findViewById(R.id.secondOr);
+
+        typeSpinner = findViewById(R.id.typeSpinner2);
+
+        Spinner tableSpinner = findViewById(R.id.searchDatabaseSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.search_database_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        tableSpinner.setAdapter(adapter);
+        tableSpinner.setOnItemSelectedListener(this);
         spinnerPosition = 0;
 
         databaseHandler = new DatabaseHandler(this);
@@ -49,23 +65,40 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         firstOption.setVisibility(View.VISIBLE);
         secondOption.setVisibility(View.VISIBLE);
         thirdOption.setVisibility(View.VISIBLE);
+        firstOr.setVisibility(View.VISIBLE);
+        secondOr.setVisibility(View.VISIBLE);
+        typeSpinner.setVisibility(View.INVISIBLE);
 
-        if(spinnerPosition == EMPLOYEES){
+        if (spinnerPosition == EMPLOYEES) {
             firstOption.setHint("Employee ID");
             secondOption.setHint("Name");
             thirdOption.setHint("Phone");
-        }else if(spinnerPosition == INFRASTRUCTURE){
+        } else if (spinnerPosition == INFRASTRUCTURE) {
             firstOption.setHint("Infrastructure ID");
-            secondOption.setHint("Type");
+            secondOption.setVisibility(View.INVISIBLE);
             thirdOption.setVisibility(View.INVISIBLE);
-        }else if(spinnerPosition == REPORTS){
+            typeSpinner.setVisibility(View.VISIBLE);
+            secondOr.setVisibility(View.INVISIBLE);
+            ArrayList<String> options = databaseHandler.getTypesList();
+            if(!options.isEmpty()){
+                options.add("");
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_item, options);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                typeSpinner.setAdapter(adapter);
+            }else{
+                Log.d("Types List", "There is no types in the database" );
+            }
+        } else if (spinnerPosition == REPORTS) {
             firstOption.setHint("Report ID");
             secondOption.setHint("Employee ID");
             thirdOption.setHint("Infrastructure ID");
-        }else if(spinnerPosition == TYPES){
+        } else if (spinnerPosition == TYPES) {
             firstOption.setVisibility(View.INVISIBLE);
             secondOption.setVisibility(View.INVISIBLE);
             thirdOption.setVisibility(View.INVISIBLE);
+            firstOr.setVisibility(View.INVISIBLE);
+            secondOr.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -74,6 +107,11 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         spinnerPosition = position;
         clearOptions();
         setOptions();
+
+        if(spinnerPosition == TYPES){
+            databaseHandler.search(spinnerPosition, null);
+            showResult();
+        }
     }
 
     @Override
@@ -85,40 +123,68 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         firstOption.setText("");
         secondOption.setText("");
         thirdOption.setText("");
+        resultsText.setText("");
     }
 
-    public void searchDB(View view){
+    public void searchDB(View view) {
         String firstOptionText;
         String secondOptionText;
         String thirdOptionText;
 
         Map<String, String> options = new HashMap<>();
 
-
-        if(spinnerPosition == EMPLOYEES){
+        if (spinnerPosition == EMPLOYEES) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
             thirdOptionText = String.valueOf(thirdOption.getText());
 
-            options.put("idEmployee", firstOptionText);
-            options.put("Name", secondOptionText);
-            options.put("Phone", thirdOptionText);
-        }else if(spinnerPosition == INFRASTRUCTURE){
+            if (!firstOptionText.isEmpty())
+                options.put("idEmployee", firstOptionText);
+            if (!secondOptionText.isEmpty())
+                options.put("Name", secondOptionText);
+            if (!thirdOptionText.isEmpty())
+                options.put("Phone", thirdOptionText);
+        } else if (spinnerPosition == INFRASTRUCTURE) {
             firstOptionText = String.valueOf(firstOption.getText());
-            secondOptionText = String.valueOf(secondOption.getText());
-
-            options.put("idInfrastructure", firstOptionText);
-            options.put("idType", secondOptionText);
-        }else if(spinnerPosition == REPORTS){
+            String type = typeSpinner.getSelectedItem().toString();
+            if (!firstOptionText.isEmpty())
+                options.put("idInfrastructure", firstOptionText);
+            if(!type.isEmpty())
+                options.put("idType", type);
+        } else if (spinnerPosition == REPORTS) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
             thirdOptionText = String.valueOf(thirdOption.getText());
 
-            options.put("idReports", firstOptionText);
-            options.put("idEmployee", secondOptionText);
-            options.put("idInfrastructure", thirdOptionText);
+            if (!firstOptionText.isEmpty())
+                options.put("idReports", firstOptionText);
+            if (!secondOptionText.isEmpty())
+                options.put("idEmployee", secondOptionText);
+            if (!thirdOptionText.isEmpty())
+                options.put("idInfrastructure", thirdOptionText);
         }
 
-        databaseHandler.search(spinnerPosition, options);
+        if (!options.isEmpty()) {
+            databaseHandler.search(spinnerPosition, options);
+            showResult();
+        }
+    }
+
+    private void showResult() {
+        ArrayList<Map<String, String>> result = databaseHandler.getResultAsString(spinnerPosition);
+        StringBuilder resultString = new StringBuilder();
+
+        if (result.isEmpty()) {
+            resultString.append("No results found.");
+        }
+
+        for (Map<String, String> thing : result) {
+            for (Map.Entry<String, String> entry : thing.entrySet()) {
+                resultString.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+            resultString.append("\n");
+        }
+
+        resultsText.setText(resultString);
     }
 }

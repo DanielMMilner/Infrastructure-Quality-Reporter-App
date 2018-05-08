@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -81,7 +82,7 @@ public class DatabaseHandler {
         resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
-    public boolean isDatabaseEmpty() {
+    public boolean isResultEmpty() {
         return !resultSet.moveToFirst();
     }
 
@@ -98,8 +99,15 @@ public class DatabaseHandler {
 
     public void search(int tableID, Map<String, String> options){
         String tableName = getTableName(tableID);
-        
+
         StringBuilder optionString = new StringBuilder();
+
+        if(tableID == TYPES){
+            optionString.append("Select * FROM ").append(tableName).append(";");
+            resultSet = database.rawQuery(String.valueOf(optionString), null);
+            return;
+        }
+
         optionString.append("Select * FROM ").append(tableName).append(" Where ");
         int i = 0;
         for (Map.Entry<String, String> entry : options.entrySet())
@@ -121,14 +129,6 @@ public class DatabaseHandler {
         Log.d("Query", String.valueOf(optionString));
 
         resultSet = database.rawQuery(String.valueOf(optionString), null);
-//        resultSet = database.rawQuery("Select * from Employees", null);
-        resultSet.moveToFirst();
-
-        do{
-            Log.d("id", String.valueOf(resultSet.getInt(0)));
-            Log.d("name", String.valueOf(resultSet.getString(1)));
-            Log.d("phone", String.valueOf(resultSet.getString(2)));
-        }while (hasNext());
     }
 
     private boolean isInteger(String key) {
@@ -186,6 +186,39 @@ public class DatabaseHandler {
         database.execSQL(String.valueOf(query));
     }
 
+    public ArrayList<Map<String, String>> getResultAsString(int tableID){
+        ArrayList<Map<String, String>> result = new ArrayList<>();
+
+        if(isResultEmpty())
+            return result;
+
+        do{
+            Map<String, String> resultMap = new HashMap<>();
+            if(tableID == EMPLOYEES){
+                resultMap.put("idEmployee", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("Name", String.valueOf(resultSet.getString(1)));
+                resultMap.put("Phone", String.valueOf(resultSet.getString(2)));
+            }else if(tableID == INFRASTRUCTURE){
+                resultMap.put("idInfrastructure", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("Type", String.valueOf(resultSet.getString(1)));
+                resultMap.put("Latitude", String.valueOf(resultSet.getDouble(2)));
+                resultMap.put("Longitude", String.valueOf(resultSet.getDouble(3)));
+            }else if(tableID == REPORTS){
+                resultMap.put("idReports", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("idEmployee", String.valueOf(resultSet.getInt(1)));
+                resultMap.put("idInfrastructure", String.valueOf(resultSet.getInt(2)));
+                resultMap.put("Quality", String.valueOf(resultSet.getInt(3)));
+                resultMap.put("InterferenceLevel", String.valueOf(resultSet.getString(4)));
+                resultMap.put("ImageFilePath", String.valueOf(resultSet.getString(5)));
+            }else if(tableID == TYPES){
+                resultMap.put("Type", String.valueOf(resultSet.getString(0)));
+            }
+            result.add(resultMap);
+        }while (hasNext());
+
+        return result;
+    }
+
     public void clearDatabase() {
         database.execSQL("delete from InfrastructureQualitys;");
         resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
@@ -194,8 +227,8 @@ public class DatabaseHandler {
     public ArrayList<String> getTypesList(){
         ArrayList<String> options = new ArrayList<>();
         resultSet = database.rawQuery("Select * from Type", null);
-        if (isDatabaseEmpty())
-            return null;
+        if (isResultEmpty())
+            return options;
 
         do{
             options.add(resultSet.getString(0));

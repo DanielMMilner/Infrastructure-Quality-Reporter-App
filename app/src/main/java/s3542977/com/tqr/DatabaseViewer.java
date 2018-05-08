@@ -93,7 +93,7 @@ public class DatabaseViewer extends AppCompatActivity {
 //        for(int i = 0; i < 10; i++){
 //            databaseHandler.generateRandomEntry();
 //        }
-//        databaseHandler.isDatabaseEmpty();
+//        databaseHandler.isResultEmpty();
 //        setText();
 //    }
 }
