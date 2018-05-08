@@ -121,6 +121,14 @@ public class DatabaseHandler {
         Log.d("Query", String.valueOf(optionString));
 
         resultSet = database.rawQuery(String.valueOf(optionString), null);
+//        resultSet = database.rawQuery("Select * from Employees", null);
+        resultSet.moveToFirst();
+
+        do{
+            Log.d("id", String.valueOf(resultSet.getInt(0)));
+            Log.d("name", String.valueOf(resultSet.getString(1)));
+            Log.d("phone", String.valueOf(resultSet.getString(2)));
+        }while (hasNext());
     }
 
     private boolean isInteger(String key) {

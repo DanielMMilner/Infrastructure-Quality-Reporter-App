@@ -51,7 +51,8 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(view.getId() == R.id.addToDatabaseSpinner){
+        Spinner spinner = (Spinner) parent;
+        if(spinner.getId() == R.id.addToDatabaseSpinner){
             tableSpinnerPosition = position;
             clearOptions();
             setOptions();
