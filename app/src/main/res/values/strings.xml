@@ -49,6 +49,7 @@
     <string name="removeSuccess">Successfully removed</string>
     <string name="enter_id">Enter ID</string>
     <string name="remove">Remove</string>
+    <string name="quality">Quality</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

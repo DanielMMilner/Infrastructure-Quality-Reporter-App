@@ -47,6 +47,7 @@ public class DatabaseHandler {
                         "  `idType` VARCHAR(45)," +
                         "  `Latitude` DOUBLE," +
                         "  `Longitude` DOUBLE," +
+                        "  `Quality` INTEGER," +
                         "  CONSTRAINT `idType`" +
                         "    FOREIGN KEY (`idType`)" +
                         "    REFERENCES Type (`idType`)" +
@@ -171,9 +172,23 @@ public class DatabaseHandler {
         Log.d("Insert Query", String.valueOf(query));
 
         database.execSQL(String.valueOf(query));
+
+        if(tableID == REPORTS){
+            updateInfrastructureQuality(options);
+        }
     }
 
-    public ArrayList<Map<String, String>> getResultAsString(int tableID) {
+    private void updateInfrastructureQuality(Map<String, String> options) {
+        String newQuality = options.get("Quality");
+        String id = options.get("idInfrastructure");
+
+        String query = "UPDATE Infrastructure SET Quality = " + newQuality + " WHERE idInfrastructure = " + id +";";
+        Log.d("Update query", query);
+
+        database.execSQL(query);
+    }
+
+    public ArrayList<Map<String, String>> getResult(int tableID) {
         ArrayList<Map<String, String>> result = new ArrayList<>();
 
         if (isResultEmpty())
@@ -190,6 +205,7 @@ public class DatabaseHandler {
                 resultMap.put("Type", String.valueOf(resultSet.getString(1)));
                 resultMap.put("Latitude", String.valueOf(resultSet.getDouble(2)));
                 resultMap.put("Longitude", String.valueOf(resultSet.getDouble(3)));
+                resultMap.put("Quality", String.valueOf(resultSet.getInt(4)));
             } else if (tableID == REPORTS) {
                 resultMap.put("idReports", String.valueOf(resultSet.getInt(0)));
                 resultMap.put("idEmployee", String.valueOf(resultSet.getInt(1)));
@@ -238,8 +254,8 @@ public class DatabaseHandler {
                 int interferenceLevel = generator.nextInt(101);
                 int numEmployees = (int) DatabaseUtils.queryNumEntries(database, "Employees");
                 int numInfrastructure = (int) DatabaseUtils.queryNumEntries(database, "Infrastructure");
-                int idEmployee = generator.nextInt(numEmployees + 1);
-                int idInfrastructure = generator.nextInt(numInfrastructure + 1);
+                int idEmployee = generator.nextInt(numEmployees + 1) + 1;
+                int idInfrastructure = generator.nextInt(numInfrastructure + 1) + 1;
 
                 Map<String, String> options = new HashMap<>();
                 options.put("idEmployee", String.valueOf(idEmployee));
@@ -256,6 +272,7 @@ public class DatabaseHandler {
             for (int i = 0; i < amount; i++) {
                 double lat = generator.nextDouble() * .47 - 38;
                 double log = generator.nextDouble() * .93 + 144.5;
+                int quality = generator.nextInt(101);
 
                 resultSet = database.rawQuery("SELECT * FROM Type ORDER BY RANDOM() LIMIT 1;", null);
                 resultSet.moveToFirst();
@@ -265,6 +282,7 @@ public class DatabaseHandler {
                 options.put("idType", type);
                 options.put("Latitude", String.valueOf(lat));
                 options.put("Longitude", String.valueOf(log));
+                options.put("Quality", String.valueOf(quality));
 
                 addEntry(tableID, options);
             }

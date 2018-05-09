@@ -18,6 +18,7 @@ import java.util.Map;
 public class AddToDatabaseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private EditText firstOption;
     private EditText secondOption;
+    private EditText thirdOption;
     private Spinner typeSpinner;
     private TextView addResultText;
     private int tableSpinnerPosition;
@@ -34,6 +35,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_add_to_database);
         firstOption = findViewById(R.id.firstOption2);
         secondOption = findViewById(R.id.secondOption2);
+        thirdOption = findViewById(R.id.thirdOption2);
 
         addResultText = findViewById(R.id.addResultText);
 
@@ -54,7 +56,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
-        if(spinner.getId() == R.id.addToDatabaseSpinner){
+        if (spinner.getId() == R.id.addToDatabaseSpinner) {
             tableSpinnerPosition = position;
             clearOptions();
             setOptions();
@@ -62,79 +64,87 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
 
     private void clearOptions() {
         firstOption.setText("");
         secondOption.setText("");
+        thirdOption.setText("");
         addResultText.setText("");
     }
 
     private void setOptions() {
         firstOption.setVisibility(View.VISIBLE);
         secondOption.setVisibility(View.VISIBLE);
+        thirdOption.setVisibility(View.INVISIBLE);
         typeSpinner.setVisibility(View.INVISIBLE);
 
-        if(tableSpinnerPosition == EMPLOYEES){
+        if (tableSpinnerPosition == EMPLOYEES) {
             firstOption.setHint("Name");
             secondOption.setHint("Phone");
-        }else if(tableSpinnerPosition == INFRASTRUCTURE){
+        } else if (tableSpinnerPosition == INFRASTRUCTURE) {
             firstOption.setHint("Latitude");
             secondOption.setHint("Longitude");
+            thirdOption.setVisibility(View.VISIBLE);
             typeSpinner.setVisibility(View.VISIBLE);
 
             ArrayList<String> options = databaseHandler.getTypesList();
-            if(options != null){
+            if (options != null) {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, options);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(adapter);
-            }else{
-                Log.d("Types List", "There is no types in the database" );
+            } else {
+                Log.d("Types List", "There is no types in the database");
             }
-        }else if(tableSpinnerPosition == TYPES){
+        } else if (tableSpinnerPosition == TYPES) {
             firstOption.setHint("Type");
             secondOption.setVisibility(View.INVISIBLE);
-        }else if(tableSpinnerPosition == REPORTS){
+        } else if (tableSpinnerPosition == REPORTS) {
             Intent intent = new Intent(this, ReportActivity.class);
             startActivity(intent);
         }
     }
 
-    public void addToDatabase(View view){
+    public void addToDatabase(View view) {
         String firstOptionText;
         String secondOptionText;
+        String thirdOptionText;
 
         Map<String, String> options = new HashMap<>();
 
-        if(tableSpinnerPosition == EMPLOYEES){
+        if (tableSpinnerPosition == EMPLOYEES) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
 
-            if(firstOptionText.isEmpty() || secondOptionText.isEmpty()){
+            if (firstOptionText.isEmpty() || secondOptionText.isEmpty()) {
                 addResultText.setText(R.string.addToDatabaseError);
                 return;
             }
 
             options.put("Name", firstOptionText);
             options.put("Phone", secondOptionText);
-        }else if(tableSpinnerPosition == INFRASTRUCTURE){
+        } else if (tableSpinnerPosition == INFRASTRUCTURE) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
+            thirdOptionText = String.valueOf(thirdOption.getText());
+
             String type = typeSpinner.getSelectedItem().toString();
 
-            if(firstOptionText.isEmpty() || secondOptionText.isEmpty()){
+            if (firstOptionText.isEmpty() || secondOptionText.isEmpty() || thirdOptionText.isEmpty()) {
                 addResultText.setText(R.string.addToDatabaseError);
                 return;
             }
 
             options.put("Latitude", firstOptionText);
             options.put("Longitude", secondOptionText);
+            options.put("Quality", thirdOptionText);
             options.put("idType", type);
-        }else if(tableSpinnerPosition == TYPES){
+        } else if (tableSpinnerPosition == TYPES) {
             firstOptionText = String.valueOf(firstOption.getText());
 
-            if(firstOptionText.isEmpty()){
+            if (firstOptionText.isEmpty()) {
                 addResultText.setText(R.string.addToDatabaseError);
                 return;
             }

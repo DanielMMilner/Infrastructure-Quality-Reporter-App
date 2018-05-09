@@ -2,6 +2,7 @@ package s3542977.com.tqr;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +26,6 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
     private Spinner typeSpinner;
 
     int spinnerPosition;
-    private static final int EMPLOYEES = 0;
-    private static final int INFRASTRUCTURE = 1;
-    private static final int REPORTS = 2;
-    private static final int TYPES = 3;
     DatabaseHandler databaseHandler;
 
 
@@ -69,12 +66,16 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         secondOr.setVisibility(View.VISIBLE);
         typeSpinner.setVisibility(View.INVISIBLE);
 
-        if (spinnerPosition == EMPLOYEES) {
+        if (spinnerPosition == DatabaseHandler.EMPLOYEES) {
             firstOption.setHint("Employee ID");
+            firstOption.setInputType(InputType.TYPE_CLASS_NUMBER);
             secondOption.setHint("Name");
+            secondOption.setInputType(InputType.TYPE_CLASS_TEXT);
             thirdOption.setHint("Phone");
-        } else if (spinnerPosition == INFRASTRUCTURE) {
+            thirdOption.setInputType(InputType.TYPE_CLASS_NUMBER);
+        } else if (spinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
             firstOption.setHint("Infrastructure ID");
+            firstOption.setInputType(InputType.TYPE_CLASS_NUMBER);
             secondOption.setVisibility(View.INVISIBLE);
             thirdOption.setVisibility(View.INVISIBLE);
             typeSpinner.setVisibility(View.VISIBLE);
@@ -89,11 +90,14 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             }else{
                 Log.d("Types List", "There is no types in the database" );
             }
-        } else if (spinnerPosition == REPORTS) {
+        } else if (spinnerPosition == DatabaseHandler.REPORTS) {
             firstOption.setHint("Report ID");
             secondOption.setHint("Employee ID");
             thirdOption.setHint("Infrastructure ID");
-        } else if (spinnerPosition == TYPES) {
+            firstOption.setInputType(InputType.TYPE_CLASS_NUMBER);
+            secondOption.setInputType(InputType.TYPE_CLASS_NUMBER);
+            thirdOption.setInputType(InputType.TYPE_CLASS_NUMBER);
+        } else if (spinnerPosition == DatabaseHandler.TYPES) {
             firstOption.setVisibility(View.INVISIBLE);
             secondOption.setVisibility(View.INVISIBLE);
             thirdOption.setVisibility(View.INVISIBLE);
@@ -108,7 +112,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         clearOptions();
         setOptions();
 
-        if(spinnerPosition == TYPES){
+        if(spinnerPosition == DatabaseHandler.TYPES){
             databaseHandler.search(spinnerPosition, null);
             showResult();
         }
@@ -133,7 +137,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
 
         Map<String, String> options = new HashMap<>();
 
-        if (spinnerPosition == EMPLOYEES) {
+        if (spinnerPosition == DatabaseHandler.EMPLOYEES) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
             thirdOptionText = String.valueOf(thirdOption.getText());
@@ -144,14 +148,14 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
                 options.put("Name", secondOptionText);
             if (!thirdOptionText.isEmpty())
                 options.put("Phone", thirdOptionText);
-        } else if (spinnerPosition == INFRASTRUCTURE) {
+        } else if (spinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
             firstOptionText = String.valueOf(firstOption.getText());
             String type = typeSpinner.getSelectedItem().toString();
             if (!firstOptionText.isEmpty())
                 options.put("idInfrastructure", firstOptionText);
             if(!type.isEmpty())
                 options.put("idType", type);
-        } else if (spinnerPosition == REPORTS) {
+        } else if (spinnerPosition == DatabaseHandler.REPORTS) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
             thirdOptionText = String.valueOf(thirdOption.getText());
@@ -171,7 +175,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
     }
 
     private void showResult() {
-        ArrayList<Map<String, String>> result = databaseHandler.getResultAsString(spinnerPosition);
+        ArrayList<Map<String, String>> result = databaseHandler.getResult(spinnerPosition);
         StringBuilder resultString = new StringBuilder();
 
         if (result.isEmpty()) {
