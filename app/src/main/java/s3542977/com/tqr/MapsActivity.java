@@ -24,11 +24,11 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ArrayList<WeightedLatLng> weightedLatLngList;
-    private ArrayList<LatLng> latLngList;
     private TileOverlay mOverlay;
     private ArrayList<MapMarkers> markers;
     private ClusterManager<MapMarkers> mClusterManager;
@@ -47,7 +47,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         databaseHandler = new DatabaseHandler(this);
-        latLngList = new ArrayList<>();
         weightedLatLngList = new ArrayList<>();
     }
 
@@ -135,23 +134,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mClusterManager = new ClusterManager<>(this, mMap);
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
-
-        for (LatLng latLng : latLngList) {
-            markers.add(new MapMarkers(latLng, "Dummy Data", "Dummy Snippet"));
-        }
     }
 
     private void getLatLngCoordinates() {
-        if (databaseHandler.isResultEmpty())
-            return;
-        do {
-            LatLng latLng = new LatLng(databaseHandler.getLatitudeAsDouble(),
-                    databaseHandler.getLongitudeAsDouble());
-            double weighting = 100 - databaseHandler.getQualityAsDouble();
-            WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, weighting);
+        databaseHandler.search(DatabaseHandler.INFRASTRUCTURE, null);
+        ArrayList<Map<String, String>> result = databaseHandler.getResult(DatabaseHandler.INFRASTRUCTURE);
 
-            latLngList.add(latLng);
+        if(result.isEmpty())
+            return;
+
+        for (Map<String, String> row : result) {
+            double lat = Double.parseDouble(row.get("Latitude"));
+            double lng = Double.parseDouble(row.get("Longitude"));
+
+            LatLng latLng = new LatLng(lat, lng);
+
+            markers.add(new MapMarkers(latLng, "Quality: " + row.get("Quality"), row.get("Type")));
+
+
+            double weighting = 100 - Double.parseDouble(row.get("Quality"));
+            WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, weighting);
             weightedLatLngList.add(weightedLatLng);
-        } while (databaseHandler.hasNext());
+        }
     }
 }

@@ -92,7 +92,7 @@ public class DatabaseHandler {
 
         StringBuilder optionString = new StringBuilder();
 
-        if (tableID == TYPES) {
+        if (options == null || options.isEmpty()) {
             optionString.append("Select * FROM ").append(tableName).append(";");
             resultSet = database.rawQuery(String.valueOf(optionString), null);
             return;

@@ -182,8 +182,8 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             resultString.append("No results found.");
         }
 
-        for (Map<String, String> thing : result) {
-            for (Map.Entry<String, String> entry : thing.entrySet()) {
+        for (Map<String, String> row : result) {
+            for (Map.Entry<String, String> entry : row.entrySet()) {
                 resultString.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
             }
             resultString.append("\n");
