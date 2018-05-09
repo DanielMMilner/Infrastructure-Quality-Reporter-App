@@ -13,14 +13,6 @@ import android.widget.TextView;
 import java.io.File;
 
 public class DatabaseViewer extends AppCompatActivity {
-    String text;
-    Bitmap imageBitmap;
-    String imagePath;
-    TextView textView;
-    ImageView imageView;
-    DatabaseHandler databaseHandler;
-    Button nextRowButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,52 +40,4 @@ public class DatabaseViewer extends AppCompatActivity {
                 break;
         }
     }
-
-//    public void clearDB(View view) {
-//        databaseHandler.clearDatabase();
-//        setStateToEmptyDatabase();
-//    }
-//
-//    private void setStateToEmptyDatabase(){
-//        nextRowButton.setEnabled(false);
-//
-//        text = "Database is empty";
-//        textView.setText(text);
-//    }
-//
-//    private void setText() {
-//        text = "latitude: " + databaseHandler.getLatitudeAsString() +
-//                "\nlongitude " + databaseHandler.getLongitudeAsString() +
-//                "\nquality " + databaseHandler.getQualityAsString() +
-//                "\ndescription " + databaseHandler.getDescription();
-//        nextRowButton.setEnabled(true);
-//
-//        textView.setText(text);
-//    }
-//
-//    public void nextRow(View view) {
-//        databaseHandler.hasNext();
-//        setText();
-//        setImage();
-//    }
-//
-//    private void setImage() {
-//        imagePath = databaseHandler.getImageFIlePath();
-//
-//        if(new File(imagePath).exists()) {
-//            imageBitmap = BitmapFactory.decodeFile(imagePath);
-//            imageBitmap = Bitmap.createBitmap(imageBitmap);
-//            imageView.setImageBitmap(imageBitmap);
-//        }else{
-//            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera, this.getTheme()));
-//        }
-//    }
-//
-//    public void addRandomData(View view){
-//        for(int i = 0; i < 10; i++){
-//            databaseHandler.generateRandomEntry();
-//        }
-//        databaseHandler.isResultEmpty();
-//        setText();
-//    }
 }

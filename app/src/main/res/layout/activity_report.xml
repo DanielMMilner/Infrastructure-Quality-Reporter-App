@@ -4,109 +4,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportActivity">
+    tools:context=".ReportActivity"
+    tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/locationText"
-        android:layout_width="187dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+        android:id="@+id/empolyeeSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:onClick="buttonPressed"
+        app:layout_constraintStart_toEndOf="@+id/employeeId"
+        app:layout_constraintTop_toTopOf="@+id/employeeId"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+    <ImageButton
+        android:id="@+id/empolyeeAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:onClick="buttonPressed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toEndOf="@+id/empolyeeSearch"
+        app:layout_constraintTop_toTopOf="@+id/empolyeeSearch"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
     <Button
         android:id="@+id/takePhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="88dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="28dp"
         android:onClick="takePhoto"
         android:text="@string/take_photo_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationText" />
+        app:layout_constraintTop_toTopOf="@+id/photoTaken" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="128dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/photoTaken"
+        android:layout_width="138dp"
+        android:layout_height="109dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/image_view_description"
-        app:layout_constraintEnd_toEndOf="@+id/takePhoto"
-        app:layout_constraintHorizontal_bias="0.463"
-        app:layout_constraintStart_toStartOf="@+id/takePhoto"
-        app:layout_constraintTop_toBottomOf="@+id/takePhoto"
-        app:srcCompat="@drawable/ic_menu_camera" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/takePhoto"
+        app:layout_constraintTop_toBottomOf="@+id/qualityBar" />
 
     <SeekBar
         android:id="@+id/qualityBar"
         android:layout_width="342dp"
         android:layout_height="21dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qualityValue" />
 
-    <TextView
-        android:id="@+id/overallQuality"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/description_prompt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
     <EditText
         android:id="@+id/descriptionText"
         android:layout_width="297dp"
-        android:layout_height="92dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="63dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="@string/type_here"
+        android:hint="@string/quality_description"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/additionalInfo" />
-
-    <TextView
-        android:id="@+id/additionalInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/description_label"
-        app:layout_constraintEnd_toEndOf="@+id/descriptionText"
-        app:layout_constraintStart_toStartOf="@+id/descriptionText"
-        app:layout_constraintTop_toBottomOf="@+id/qualityBar" />
+        app:layout_constraintTop_toBottomOf="@+id/photoTaken" />
 
     <TextView
         android:id="@+id/qualityValue"
-        android:layout_width="63dp"
-        android:layout_height="22dp"
+        android:layout_width="91dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/quality_0"
         app:layout_constraintEnd_toEndOf="@+id/qualityBar"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="@+id/qualityBar"
-        app:layout_constraintTop_toBottomOf="@+id/overallQuality" />
+        app:layout_constraintTop_toBottomOf="@+id/interferenceLevel" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="8dp"
         android:onClick="submitReport"
         android:text="@string/submit_report_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+
+    <EditText
+        android:id="@+id/employeeId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/employee_id"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/infrastructureID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/infrastructure_id"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employeeId" />
+
+    <Button
+        android:id="@+id/getInterferenceButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/interferenceLevel"
+        app:layout_constraintTop_toTopOf="@+id/interferenceLevel" />
+
+    <EditText
+        android:id="@+id/interferenceLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/interference_level"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infrastructureID" />
+
+    <ImageButton
+        android:id="@+id/infrastructureSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:onClick="buttonPressed"
+        app:layout_constraintStart_toEndOf="@+id/infrastructureID"
+        app:layout_constraintTop_toTopOf="@+id/infrastructureID"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+    <ImageButton
+        android:id="@+id/infrastructureAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:onClick="buttonPressed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/infrastructureSearch"
+        app:layout_constraintTop_toTopOf="@+id/infrastructureSearch"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,5 +1,6 @@
 package s3542977.com.tqr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -51,8 +52,9 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tableSpinner.setAdapter(adapter);
         tableSpinner.setOnItemSelectedListener(this);
-        spinnerPosition = 0;
-
+        Intent mIntent = getIntent();
+        spinnerPosition = mIntent.getIntExtra("Table", 0);
+        tableSpinner.setSelection(spinnerPosition);
         databaseHandler = new DatabaseHandler(this);
 
         setOptions();

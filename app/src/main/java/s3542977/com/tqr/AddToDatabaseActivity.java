@@ -1,6 +1,12 @@
 package s3542977.com.tqr;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,11 +29,8 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
     private TextView addResultText;
     private int tableSpinnerPosition;
     private DatabaseHandler databaseHandler;
-
-    private static final int EMPLOYEES = 0;
-    private static final int INFRASTRUCTURE = 1;
-    private static final int REPORTS = 2;
-    private static final int TYPES = 3;
+    double longitude = 0;
+    double latitude = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,10 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tableSpinner.setAdapter(adapter);
         tableSpinner.setOnItemSelectedListener(this);
-        tableSpinnerPosition = 0;
+
+        Intent mIntent = getIntent();
+        tableSpinnerPosition = mIntent.getIntExtra("Table", 0);
+        tableSpinner.setSelection(tableSpinnerPosition);
 
         databaseHandler = new DatabaseHandler(this);
 
@@ -80,14 +86,19 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
         thirdOption.setVisibility(View.INVISIBLE);
         typeSpinner.setVisibility(View.INVISIBLE);
 
-        if (tableSpinnerPosition == EMPLOYEES) {
+        if (tableSpinnerPosition == DatabaseHandler.EMPLOYEES) {
             firstOption.setHint("Name");
             secondOption.setHint("Phone");
-        } else if (tableSpinnerPosition == INFRASTRUCTURE) {
+        } else if (tableSpinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
             firstOption.setHint("Latitude");
             secondOption.setHint("Longitude");
             thirdOption.setVisibility(View.VISIBLE);
             typeSpinner.setVisibility(View.VISIBLE);
+
+            getCurrentLocation();
+
+            firstOption.setText(String.valueOf((latitude)));
+            secondOption.setText(String.valueOf((longitude)));
 
             ArrayList<String> options = databaseHandler.getTypesList();
             if (options != null) {
@@ -98,12 +109,38 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             } else {
                 Log.d("Types List", "There is no types in the database");
             }
-        } else if (tableSpinnerPosition == TYPES) {
+        } else if (tableSpinnerPosition == DatabaseHandler.TYPES) {
             firstOption.setHint("Type");
             secondOption.setVisibility(View.INVISIBLE);
-        } else if (tableSpinnerPosition == REPORTS) {
+        } else if (tableSpinnerPosition == DatabaseHandler.REPORTS) {
             Intent intent = new Intent(this, ReportActivity.class);
             startActivity(intent);
+        }
+    }
+
+    private void getCurrentLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Test", "No ACCESS_FINE_LOCATION Permission");
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Test", "No ACCESS_COARSE_LOCATION Permission");
+            return;
+        }
+
+        if (locationManager == null)
+            Log.i("Test", "Location manager is null");
+
+        assert locationManager != null;
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        if(lastKnownLocation != null){
+            latitude = lastKnownLocation.getLatitude();
+            longitude = lastKnownLocation.getLongitude();
         }
     }
 
@@ -114,7 +151,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
         Map<String, String> options = new HashMap<>();
 
-        if (tableSpinnerPosition == EMPLOYEES) {
+        if (tableSpinnerPosition == DatabaseHandler.EMPLOYEES) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
 
@@ -125,7 +162,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
             options.put("Name", firstOptionText);
             options.put("Phone", secondOptionText);
-        } else if (tableSpinnerPosition == INFRASTRUCTURE) {
+        } else if (tableSpinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
             firstOptionText = String.valueOf(firstOption.getText());
             secondOptionText = String.valueOf(secondOption.getText());
             thirdOptionText = String.valueOf(thirdOption.getText());
@@ -141,7 +178,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             options.put("Longitude", secondOptionText);
             options.put("Quality", thirdOptionText);
             options.put("idType", type);
-        } else if (tableSpinnerPosition == TYPES) {
+        } else if (tableSpinnerPosition == DatabaseHandler.TYPES) {
             firstOptionText = String.valueOf(firstOption.getText());
 
             if (firstOptionText.isEmpty()) {

@@ -8,7 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_report">Report Submission</string>
-    <string name="take_photo_button">Capture Photos</string>
+    <string name="take_photo_button">Capture Photo</string>
     <string name="description_prompt">How do you rate the overall quality of this infrastructure?</string>
     <string name="description_label">Description</string>
     <string name="submit_report_label">Submit</string>
@@ -50,6 +50,13 @@
     <string name="enter_id">Enter ID</string>
     <string name="remove">Remove</string>
     <string name="quality">Quality</string>
+    <string name="quality_description">Quality Description</string>
+    <string name="quality_0">Quality: 0</string>
+    <string name="employee_id">Employee ID</string>
+    <string name="infrastructure_id">Infrastructure ID</string>
+    <string name="connect">Connect</string>
+    <string name="interference_level">Interference level</string>
+    <string name="find_new">Find/New</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

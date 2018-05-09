@@ -83,7 +83,7 @@ public class DatabaseHandler {
         resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
-    public boolean isResultEmpty() {
+    private boolean isResultEmpty() {
         return !resultSet.moveToFirst();
     }
 
@@ -173,7 +173,7 @@ public class DatabaseHandler {
 
         database.execSQL(String.valueOf(query));
 
-        if(tableID == REPORTS){
+        if (tableID == REPORTS) {
             updateInfrastructureQuality(options);
         }
     }
@@ -182,7 +182,7 @@ public class DatabaseHandler {
         String newQuality = options.get("Quality");
         String id = options.get("idInfrastructure");
 
-        String query = "UPDATE Infrastructure SET Quality = " + newQuality + " WHERE idInfrastructure = " + id +";";
+        String query = "UPDATE Infrastructure SET Quality = " + newQuality + " WHERE idInfrastructure = " + id + ";";
         Log.d("Update query", query);
 
         database.execSQL(query);
@@ -331,7 +331,7 @@ public class DatabaseHandler {
         return options;
     }
 
-    public boolean hasNext() {
+    private boolean hasNext() {
         if (resultSet.isLast()) {
             resultSet.moveToFirst();
             return false;
@@ -339,37 +339,5 @@ public class DatabaseHandler {
             resultSet.moveToNext();
             return true;
         }
-    }
-
-    public String getLatitudeAsString() {
-        return resultSet.getString(LATITUDE_COLUMN);
-    }
-
-    public double getLatitudeAsDouble() {
-        return resultSet.getDouble(LATITUDE_COLUMN);
-    }
-
-    public String getLongitudeAsString() {
-        return resultSet.getString(LONGITUDE_COLUMN);
-    }
-
-    public double getLongitudeAsDouble() {
-        return resultSet.getDouble(LONGITUDE_COLUMN);
-    }
-
-    public String getQualityAsString() {
-        return resultSet.getString(QUALITY_COLUMN);
-    }
-
-    public double getQualityAsDouble() {
-        return resultSet.getDouble(QUALITY_COLUMN);
-    }
-
-    public String getDescription() {
-        return resultSet.getString(DESCRIPTION_COLUMN);
-    }
-
-    public String getImageFIlePath() {
-        return resultSet.getString(IMAGE_FILE_PATH_COLUMN);
     }
 }
