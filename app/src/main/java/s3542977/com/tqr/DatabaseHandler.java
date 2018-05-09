@@ -14,12 +14,6 @@ import java.util.Random;
 import static android.content.Context.MODE_PRIVATE;
 
 public class DatabaseHandler {
-    private static final int LATITUDE_COLUMN = 0;
-    private static final int LONGITUDE_COLUMN = 1;
-    private static final int QUALITY_COLUMN = 2;
-    private static final int DESCRIPTION_COLUMN = 3;
-    private static final int IMAGE_FILE_PATH_COLUMN = 4;
-
     public static final int EMPLOYEES = 0;
     public static final int INFRASTRUCTURE = 1;
     public static final int REPORTS = 2;

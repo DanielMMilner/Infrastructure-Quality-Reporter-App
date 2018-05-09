@@ -5,13 +5,13 @@ import com.google.maps.android.clustering.ClusterItem;
 
 public class MapMarkers implements ClusterItem {
     private final LatLng mPosition;
-    private final String mTitle;
-    private final String mSnippet;
+    private final String quality;
+    private final String type;
 
-    public MapMarkers(LatLng mPosition, String mTitle, String mSnippet) {
+    MapMarkers(LatLng mPosition, String mTitle, String mSnippet) {
         this.mPosition = mPosition;
-        this.mTitle = mTitle;
-        this.mSnippet = mSnippet;
+        this.quality = mTitle;
+        this.type = mSnippet;
     }
 
     @Override
@@ -21,11 +21,11 @@ public class MapMarkers implements ClusterItem {
 
     @Override
     public String getTitle() {
-        return mTitle;
+        return quality;
     }
 
     @Override
     public String getSnippet() {
-        return mSnippet;
+        return type;
     }
 }
