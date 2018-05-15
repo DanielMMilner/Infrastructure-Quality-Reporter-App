@@ -1,25 +1,29 @@
 package s3542977.com.tqr;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class DatabaseResultActivity extends AppCompatActivity {
+    private Intent resultIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_result);
+        resultIntent = new Intent();
 
         ArrayList<String> resultList = getIntent().getStringArrayListExtra("resultList");
-        int tableId = getIntent().getIntExtra("tableId", -1);
+
+        ArrayList<Integer> resultIdList = getIntent().getIntegerArrayListExtra("resultIdList");
+
 
         if (resultList == null || resultList.isEmpty()) {
             Log.d("Result", "Its empty");
@@ -28,15 +32,19 @@ public class DatabaseResultActivity extends AppCompatActivity {
 
         LinearLayout linearLayout = findViewById(R.id.layout);
 
-        int i = 0;
+        int index = 0;
 
-        for (String result :resultList) {
-            i++;
+        for (String result : resultList) {
+            index++;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             Button button = new Button(this);
-            button.setId(i);
+            if (resultIdList.isEmpty()) {
+                button.setId(index);
+            } else {
+                button.setId(resultIdList.get(index - 1));
+            }
             final int id_ = button.getId();
 
             button.setText(result);
@@ -44,7 +52,13 @@ public class DatabaseResultActivity extends AppCompatActivity {
 
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
+                    Button button1 = findViewById(view.getId());
                     Log.d("Button", String.valueOf(id_));
+                    resultIntent.putExtra("chosenResult", button1.getText());
+                    resultIntent.putExtra("idResult", id_);
+
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
                 }
             });
 

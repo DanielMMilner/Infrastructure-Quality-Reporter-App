@@ -1,6 +1,7 @@
 package s3542977.com.tqr;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,12 +21,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SearchDatabaseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    static final int REQUEST_ID = 1;
+
     private EditText firstOption;
     private EditText secondOption;
     private EditText thirdOption;
@@ -64,6 +66,9 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         tableSpinner.setOnItemSelectedListener(this);
         Intent mIntent = getIntent();
         spinnerPosition = mIntent.getIntExtra("Table", 0);
+        if (mIntent.getBooleanExtra("returnData", false)) {
+            tableSpinner.setEnabled(false);
+        }
         tableSpinner.setSelection(spinnerPosition);
         databaseHandler = new DatabaseHandler(this);
 
@@ -102,6 +107,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             } else {
                 Log.d("Types List", "There is no types in the database");
             }
+            typeSpinner.setSelection(options.size() - 1);
         } else if (spinnerPosition == DatabaseHandler.REPORTS) {
             firstOption.setHint("Report ID");
             secondOption.setHint("Employee ID");
@@ -175,10 +181,10 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             latitude = lastKnownLocation.getLatitude();
             longitude = lastKnownLocation.getLongitude();
         }
-        double maxLongitude = longitude + 0.0001;
-        double maxLatitude = latitude + 0.0001;
-        double minLongitude = longitude - 0.0001;
-        double minLatitude = latitude - 0.0001;
+        double maxLongitude = longitude + 0.0002;
+        double maxLatitude = latitude + 0.0002;
+        double minLongitude = longitude - 0.0002;
+        double minLatitude = latitude - 0.0002;
 
         databaseHandler.searchLatLngInRange(maxLatitude, maxLongitude, minLatitude, minLongitude);
 
@@ -232,9 +238,9 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
     private void showResult() {
         Intent intent = new Intent(this, DatabaseResultActivity.class);
         ArrayList<String> resultList = new ArrayList<>();
-
-        ArrayList<Map<String, String>> result = databaseHandler.getResult(spinnerPosition);
         StringBuilder resultString = new StringBuilder();
+        ArrayList<Map<String, String>> result = databaseHandler.getResult(spinnerPosition);
+        ArrayList<Integer> resultIdList = databaseHandler.getResultIdsList(spinnerPosition);
 
         if (result.isEmpty()) {
             resultString.append("No results found.");
@@ -255,8 +261,34 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         }
 
         intent.putExtra("resultList", resultList);
-        intent.putExtra("tableId", spinnerPosition);
+        intent.putExtra("resultIdList", resultIdList);
 
-        startActivity(intent);
+
+        startActivityForResult(intent, REQUEST_ID);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent resultIntent = new Intent();
+
+        switch (requestCode) {
+            case (REQUEST_ID): {
+                if (resultCode == Activity.RESULT_OK) {
+                    String returnValue = data.getStringExtra("chosenResult");
+                    Integer returnValueId = data.getIntExtra("idResult", -1);
+
+                    Log.d("returnValue", returnValue);
+                    Log.d("returnValueId", String.valueOf(returnValueId));
+
+                    resultIntent.putExtra("idResult", returnValueId);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
+                break;
+            }
+            default:
+                Log.d("Result", "Fail");
+        }
     }
 }

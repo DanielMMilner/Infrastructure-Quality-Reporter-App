@@ -1,5 +1,6 @@
 package s3542977.com.tqr;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,8 @@ import java.util.Map;
 
 public class ReportActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_EMPLOYEE_ID = 2;
+    static final int REQUEST_INFRASTRUCTURE_ID = 3;
 
     int quality = 0;
     TextView qualityText;
@@ -28,9 +31,7 @@ public class ReportActivity extends AppCompatActivity {
     EditText employeeIdText;
     EditText infrastructureIdText;
     EditText interferenceLevel;
-
     ImageView photo;
-
     DatabaseHandler databaseHandler;
     String imageFilePath = "";
 
@@ -78,22 +79,26 @@ public class ReportActivity extends AppCompatActivity {
             case (R.id.empolyeeAdd):
                 intent = new Intent(this, AddToDatabaseActivity.class);
                 intent.putExtra("Table", DatabaseHandler.EMPLOYEES);
-                startActivity(intent);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_EMPLOYEE_ID);
                 break;
             case (R.id.empolyeeSearch):
                 intent = new Intent(this, SearchDatabaseActivity.class);
                 intent.putExtra("Table", DatabaseHandler.EMPLOYEES);
-                startActivity(intent);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_EMPLOYEE_ID);
                 break;
             case (R.id.infrastructureAdd):
                 intent = new Intent(this, AddToDatabaseActivity.class);
                 intent.putExtra("Table", DatabaseHandler.INFRASTRUCTURE);
-                startActivity(intent);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_INFRASTRUCTURE_ID);
                 break;
             case (R.id.infrastructureSearch):
                 intent = new Intent(this, SearchDatabaseActivity.class);
                 intent.putExtra("Table", DatabaseHandler.INFRASTRUCTURE);
-                startActivity(intent);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_INFRASTRUCTURE_ID);
                 break;
             case (R.id.getInterferenceButton):
                 break;
@@ -101,7 +106,6 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void takePhoto(View view) {
-        //http://www.codexpedia.com/android/action_image_capture-intent-for-taking-image-in-android/
         long time = System.currentTimeMillis();
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = new File(storageDir.getAbsolutePath() + "/" + time + ".jpg");
@@ -117,12 +121,33 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (new File(imageFilePath).exists()) {
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imageFilePath);
-            imageBitmap = Bitmap.createBitmap(imageBitmap);
-            photo.setImageBitmap(imageBitmap);
-        } else {
-            photo.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera, this.getTheme()));
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case (REQUEST_INFRASTRUCTURE_ID):
+                if (resultCode == Activity.RESULT_OK) {
+                    Integer returnValueId = data.getIntExtra("idResult", -1);
+                    Log.d("returnValueId Report", String.valueOf(returnValueId));
+                    infrastructureIdText.setText(String.valueOf(returnValueId));
+                }
+                break;
+            case (REQUEST_EMPLOYEE_ID):
+                if (resultCode == Activity.RESULT_OK) {
+                    Integer returnValueId = data.getIntExtra("idResult", -1);
+                    Log.d("returnValueId Report", String.valueOf(returnValueId));
+                    employeeIdText.setText(String.valueOf(returnValueId));
+                }
+                break;
+            case (REQUEST_IMAGE_CAPTURE):
+                if (new File(imageFilePath).exists()) {
+                    Bitmap imageBitmap = BitmapFactory.decodeFile(imageFilePath);
+                    imageBitmap = Bitmap.createBitmap(imageBitmap);
+                    photo.setImageBitmap(imageBitmap);
+                } else {
+                    photo.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera, this.getTheme()));
+                }
+                break;
+            default:
+                Log.d("Result", "Fail");
         }
     }
 

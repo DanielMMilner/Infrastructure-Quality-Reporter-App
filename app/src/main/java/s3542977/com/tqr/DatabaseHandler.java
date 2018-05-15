@@ -114,7 +114,7 @@ public class DatabaseHandler implements Serializable {
         resultSet = database.rawQuery(String.valueOf(optionString), null);
     }
 
-    public void searchLatLngInRange(double maxLatitude, double maxLongitude, double minLatitude, double minLongitude){
+    public void searchLatLngInRange(double maxLatitude, double maxLongitude, double minLatitude, double minLongitude) {
         StringBuilder query = new StringBuilder();
 
         query.append("SELECT * FROM Infrastructure WHERE (Latitude BETWEEN ")
@@ -228,6 +228,20 @@ public class DatabaseHandler implements Serializable {
         return result;
     }
 
+    public ArrayList<Integer> getResultIdsList(int tableID) {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        if (isResultEmpty())
+            return result;
+
+        do {
+            if (tableID == EMPLOYEES || tableID == INFRASTRUCTURE || tableID == REPORTS) {
+                result.add(resultSet.getInt(0));
+            }
+        } while (hasNext());
+        return result;
+    }
+
     public void clearTable(int tableID) {
         String table = getTableName(tableID);
 
@@ -325,13 +339,13 @@ public class DatabaseHandler implements Serializable {
         }
     }
 
-    public ArrayList<Map<String, String>> getLastRow(int tableID){
+    public ArrayList<Map<String, String>> getLastRow(int tableID) {
         String tableName = getTableName(tableID);
 
         StringBuilder query = new StringBuilder();
         String idName;
 
-        switch (tableID){
+        switch (tableID) {
             case EMPLOYEES:
                 idName = "idEmployee";
                 break;
@@ -346,8 +360,8 @@ public class DatabaseHandler implements Serializable {
         }
 
         query.append("SELECT * FROM '").append(tableName).append("' WHERE ")
-            .append(idName).append(" = (SELECT MAX(").append(idName).append(") FROM '")
-            .append(tableName).append("');");
+                .append(idName).append(" = (SELECT MAX(").append(idName).append(") FROM '")
+                .append(tableName).append("');");
 
         Log.d("Last Row Query", String.valueOf(query));
 

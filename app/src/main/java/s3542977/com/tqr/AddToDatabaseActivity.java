@@ -1,6 +1,7 @@
 package s3542977.com.tqr;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -220,5 +221,12 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
             addResultText.setText(resultString);
         }
+        ArrayList<Integer> resultID = databaseHandler.getResultIdsList(tableSpinnerPosition);
+
+        Intent resultIntent = new Intent();
+
+        resultIntent.putExtra("idResult", resultID.get(0));
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 }
