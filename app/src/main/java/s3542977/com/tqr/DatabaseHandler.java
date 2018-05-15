@@ -113,6 +113,18 @@ public class DatabaseHandler {
         resultSet = database.rawQuery(String.valueOf(optionString), null);
     }
 
+    public void searchLatLngInRange(double maxLatitude, double maxLongitude, double minLatitude, double minLongitude){
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT * FROM Infrastructure WHERE (Latitude BETWEEN ")
+                .append(minLatitude).append(" AND ").append(maxLatitude).append(") AND (Longitude BETWEEN ")
+                .append(minLongitude).append(" AND ").append(maxLongitude).append(");");
+
+        Log.d("Nearby Query", String.valueOf(query));
+
+        resultSet = database.rawQuery(String.valueOf(query), null);
+    }
+
     private boolean isInteger(String key) {
         return key.equals("idEmployee") || key.equals("idReports") || key.equals("idInfrastructure")
                 || key.equals("Latitude") || key.equals("Longitude");

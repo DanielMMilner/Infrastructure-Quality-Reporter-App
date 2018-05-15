@@ -1,7 +1,13 @@
 package s3542977.com.tqr;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
@@ -9,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +31,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
     private TextView resultsText;
     private TextView firstOr;
     private TextView secondOr;
+    private Button nearbyButton;
     private Spinner typeSpinner;
 
     int spinnerPosition;
@@ -37,6 +45,8 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         firstOption = findViewById(R.id.firstOption);
         secondOption = findViewById(R.id.secondOption);
         thirdOption = findViewById(R.id.thirdOption);
+
+        nearbyButton = findViewById(R.id.nearbyButton);
 
         resultsText = findViewById(R.id.resultsText);
         resultsText.setMovementMethod(new ScrollingMovementMethod());
@@ -81,16 +91,16 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             secondOption.setVisibility(View.INVISIBLE);
             thirdOption.setVisibility(View.INVISIBLE);
             typeSpinner.setVisibility(View.VISIBLE);
-            secondOr.setVisibility(View.INVISIBLE);
+            secondOr.setVisibility(View.VISIBLE);
             ArrayList<String> options = databaseHandler.getTypesList();
-            if(!options.isEmpty()){
+            if (!options.isEmpty()) {
                 options.add("");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, options);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(adapter);
-            }else{
-                Log.d("Types List", "There is no types in the database" );
+            } else {
+                Log.d("Types List", "There is no types in the database");
             }
         } else if (spinnerPosition == DatabaseHandler.REPORTS) {
             firstOption.setHint("Report ID");
@@ -114,9 +124,15 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         clearOptions();
         setOptions();
 
-        if(spinnerPosition == DatabaseHandler.TYPES){
+        if (spinnerPosition == DatabaseHandler.TYPES) {
             databaseHandler.search(spinnerPosition, null);
             showResult();
+        }
+
+        if (spinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
+            nearbyButton.setVisibility(View.VISIBLE);
+        } else {
+            nearbyButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -130,6 +146,43 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
         secondOption.setText("");
         thirdOption.setText("");
         resultsText.setText("");
+    }
+
+    public void searchNearby(View view) {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Test", "No ACCESS_FINE_LOCATION Permission");
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Test", "No ACCESS_COARSE_LOCATION Permission");
+            return;
+        }
+
+        if (locationManager == null)
+            Log.i("Test", "Location manager is null");
+
+        assert locationManager != null;
+        double longitude = 0;
+        double latitude = 0;
+
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        if (lastKnownLocation != null) {
+            latitude = lastKnownLocation.getLatitude();
+            longitude = lastKnownLocation.getLongitude();
+        }
+        double maxLongitude = longitude + 0.0001;
+        double maxLatitude = latitude + 0.0001;
+        double minLongitude = longitude - 0.0001;
+        double minLatitude = latitude - 0.0001;
+
+        databaseHandler.searchLatLngInRange(maxLatitude, maxLongitude, minLatitude, minLongitude);
+
+        showResult();
     }
 
     public void searchDB(View view) {
@@ -155,7 +208,7 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             String type = typeSpinner.getSelectedItem().toString();
             if (!firstOptionText.isEmpty())
                 options.put("idInfrastructure", firstOptionText);
-            if(!type.isEmpty())
+            if (!type.isEmpty())
                 options.put("idType", type);
         } else if (spinnerPosition == DatabaseHandler.REPORTS) {
             firstOptionText = String.valueOf(firstOption.getText());

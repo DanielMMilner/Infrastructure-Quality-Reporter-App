@@ -132,4 +132,19 @@
         app:layout_constraintStart_toStartOf="@+id/secondOption"
         app:layout_constraintTop_toBottomOf="@+id/secondOption" />
 
+    <Button
+        android:id="@+id/nearbyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:onClick="searchNearby"
+        android:text="Search Nearby"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/typeSpinner2"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/secondOption"
+        app:layout_constraintTop_toBottomOf="@+id/secondOr" />
+
 </android.support.constraint.ConstraintLayout>
