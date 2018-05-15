@@ -69,7 +69,8 @@
         <activity
             android:name=".RemoveFromDatabaseActivity"
             android:parentActivityName=".DatabaseViewer" />
-        <activity android:name=".InfrastructureHistoryActivity"></activity>
+        <activity android:name=".InfrastructureHistoryActivity" />
+        <activity android:name=".DatabaseResultActivity"></activity>
     </application>
 
 </manifest>

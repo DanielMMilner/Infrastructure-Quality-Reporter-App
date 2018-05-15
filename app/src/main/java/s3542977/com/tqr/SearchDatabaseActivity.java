@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,6 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
 
     int spinnerPosition;
     DatabaseHandler databaseHandler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,20 +230,33 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
     }
 
     private void showResult() {
+        Intent intent = new Intent(this, DatabaseResultActivity.class);
+        ArrayList<String> resultList = new ArrayList<>();
+
         ArrayList<Map<String, String>> result = databaseHandler.getResult(spinnerPosition);
         StringBuilder resultString = new StringBuilder();
 
         if (result.isEmpty()) {
             resultString.append("No results found.");
+            resultsText.setText(resultString);
+            return;
         }
 
         for (Map<String, String> row : result) {
+            int i = 0;
             for (Map.Entry<String, String> entry : row.entrySet()) {
-                resultString.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                resultString.append(entry.getKey()).append(": ").append(entry.getValue());
+                if (i++ != row.size() - 1) {
+                    resultString.append("\n");
+                }
             }
-            resultString.append("\n");
+            resultList.add(resultString.toString());
+            resultString.setLength(0);
         }
 
-        resultsText.setText(resultString);
+        intent.putExtra("resultList", resultList);
+        intent.putExtra("tableId", spinnerPosition);
+
+        startActivity(intent);
     }
 }

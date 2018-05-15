@@ -6,6 +6,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DatabaseHandler {
+public class DatabaseHandler implements Serializable {
     public static final int EMPLOYEES = 0;
     public static final int INFRASTRUCTURE = 1;
     public static final int REPORTS = 2;

@@ -35,7 +35,9 @@ public class DatabaseViewer extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.debugButton:
-                intent = new Intent(this, DebugDatabaseActivity.class);
+//                intent = new Intent(this, DebugDatabaseActivity.class);
+                intent = new Intent(this, DatabaseResultActivity.class);
+
                 startActivity(intent);
                 break;
         }
