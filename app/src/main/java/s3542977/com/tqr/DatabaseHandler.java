@@ -74,7 +74,6 @@ public class DatabaseHandler {
                         "    ON DELETE NO ACTION" +
                         "    ON UPDATE NO ACTION);";
         database.execSQL(setUpQuery);
-        resultSet = database.rawQuery("Select * from InfrastructureQualitys", null);
     }
 
     private boolean isResultEmpty() {
@@ -311,6 +310,37 @@ public class DatabaseHandler {
                 addEntry(tableID, options);
             }
         }
+    }
+
+    public ArrayList<Map<String, String>> getLastRow(int tableID){
+        String tableName = getTableName(tableID);
+
+        StringBuilder query = new StringBuilder();
+        String idName;
+
+        switch (tableID){
+            case EMPLOYEES:
+                idName = "idEmployee";
+                break;
+            case INFRASTRUCTURE:
+                idName = "idInfrastructure";
+                break;
+            case REPORTS:
+                idName = "idReports";
+                break;
+            default:
+                return new ArrayList<>();
+        }
+
+        query.append("SELECT * FROM '").append(tableName).append("' WHERE ")
+            .append(idName).append(" = (SELECT MAX(").append(idName).append(") FROM '")
+            .append(tableName).append("');");
+
+        Log.d("Last Row Query", String.valueOf(query));
+
+        resultSet = database.rawQuery(String.valueOf(query), null);
+
+        return getResult(tableID);
     }
 
     public ArrayList<String> getTypesList() {

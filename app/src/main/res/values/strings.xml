@@ -57,6 +57,7 @@
     <string name="connect">Connect</string>
     <string name="interference_level">Interference level</string>
     <string name="find_new">Find/New</string>
+    <string name="addToDatabaseFailed">Failed to add to database</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

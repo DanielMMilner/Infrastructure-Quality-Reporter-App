@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -88,10 +89,14 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
         if (tableSpinnerPosition == DatabaseHandler.EMPLOYEES) {
             firstOption.setHint("Name");
+            firstOption.setInputType(InputType.TYPE_CLASS_TEXT);
             secondOption.setHint("Phone");
+            secondOption.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else if (tableSpinnerPosition == DatabaseHandler.INFRASTRUCTURE) {
             firstOption.setHint("Latitude");
+            firstOption.setInputType(InputType.TYPE_CLASS_NUMBER);
             secondOption.setHint("Longitude");
+            secondOption.setInputType(InputType.TYPE_CLASS_NUMBER);
             thirdOption.setVisibility(View.VISIBLE);
             typeSpinner.setVisibility(View.VISIBLE);
 
@@ -111,6 +116,7 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
             }
         } else if (tableSpinnerPosition == DatabaseHandler.TYPES) {
             firstOption.setHint("Type");
+            firstOption.setInputType(InputType.TYPE_CLASS_TEXT);
             secondOption.setVisibility(View.INVISIBLE);
         } else if (tableSpinnerPosition == DatabaseHandler.REPORTS) {
             Intent intent = new Intent(this, ReportActivity.class);
@@ -190,9 +196,29 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
         }
 
         clearOptions();
-
-        addResultText.setText(R.string.addToDatabse);
-
         databaseHandler.addEntry(tableSpinnerPosition, options);
+
+        ArrayList<Map<String, String>> result = databaseHandler.getLastRow(tableSpinnerPosition);
+
+        if (result.isEmpty()){
+            if(tableSpinnerPosition == DatabaseHandler.TYPES) {
+                String text = "Successfully added to database\n Type: " + options.get("idType");
+                addResultText.setText(text);
+            }else{
+                addResultText.setText(R.string.addToDatabaseFailed);
+            }
+        }else{
+            StringBuilder resultString = new StringBuilder();
+            resultString.append("Successfully added to Database").append('\n');
+
+            for (Map<String, String> row : result) {
+                for (Map.Entry<String, String> entry : row.entrySet()) {
+                    resultString.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                }
+                resultString.append("\n");
+            }
+
+            addResultText.setText(resultString);
+        }
     }
 }
