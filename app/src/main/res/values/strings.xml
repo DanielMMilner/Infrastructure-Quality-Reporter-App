@@ -61,6 +61,10 @@
     <string name="searchicon">searchIcon</string>
     <string name="addicon">addIcon</string>
     <string name="speed_if_applicable">Speed if applicable</string>
+    <string name="Stop_Searching">Stop Searching</string>
+    <string name="bluetooth">BlueTooth</string>
+    <string name="make_discoverable">Make Discoverable</string>
+    <string name="search_for_devices">Search for devices</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

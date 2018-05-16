@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class ReportActivity extends AppCompatActivity {
     static final int REQUEST_EMPLOYEE_ID = 2;
     static final int REQUEST_INFRASTRUCTURE_ID = 3;
     static final int REQUEST_SPEED_TEST = 4;
-
+    static final int REQUEST_INTERFERENCE_LEVEL = 5;
 
     int quality = 0;
     TextView qualityText;
@@ -37,6 +38,7 @@ public class ReportActivity extends AppCompatActivity {
     ImageView photo;
     DatabaseHandler databaseHandler;
     String imageFilePath = "";
+    SeekBar qualityBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class ReportActivity extends AppCompatActivity {
 
         databaseHandler = new DatabaseHandler(this);
 
-        final SeekBar qualityBar = findViewById(R.id.qualityBar);
+        qualityBar = findViewById(R.id.qualityBar);
         qualityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -110,6 +112,9 @@ public class ReportActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SPEED_TEST);
                 break;
             case (R.id.getInterferenceButton):
+                intent = new Intent(this, BluetoothActivity.class);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_INTERFERENCE_LEVEL);
                 break;
         }
     }
@@ -186,5 +191,16 @@ public class ReportActivity extends AppCompatActivity {
         options.put("ImageFilePath", imageFilePath);
 
         databaseHandler.addEntry(DatabaseHandler.REPORTS, options);
+
+        qualityBar.setProgress(0);
+        descriptionText.setText("");
+        employeeIdText.setText("");
+        infrastructureIdText.setText("");
+        interferenceLevel.setText("");
+        speedTestText.setText("");
+        photo.setImageBitmap(null);
+        imageFilePath = "";
+
+        Toast.makeText(this, "Successfully added to database", Toast.LENGTH_LONG).show();
     }
 }
