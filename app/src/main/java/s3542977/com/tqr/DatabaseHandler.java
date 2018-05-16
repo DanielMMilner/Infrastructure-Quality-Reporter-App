@@ -104,7 +104,7 @@ public class DatabaseHandler implements Serializable {
             if (isInteger(entry.getKey())) {
                 optionString.append(" = ").append(entry.getValue());
             } else {
-                optionString.append(" like '").append(entry.getValue()).append("'");
+                optionString.append(" like '%").append(entry.getValue()).append("%'");
             }
 
             if (i++ != options.size() - 1) {

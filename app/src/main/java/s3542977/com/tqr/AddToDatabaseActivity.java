@@ -221,12 +221,14 @@ public class AddToDatabaseActivity extends AppCompatActivity implements AdapterV
 
             addResultText.setText(resultString);
         }
-        ArrayList<Integer> resultID = databaseHandler.getResultIdsList(tableSpinnerPosition);
 
-        Intent resultIntent = new Intent();
+        if(getIntent().getBooleanExtra("returnData", false)){
+            Intent resultIntent = new Intent();
+            ArrayList<Integer> resultID = databaseHandler.getResultIdsList(tableSpinnerPosition);
 
-        resultIntent.putExtra("idResult", resultID.get(0));
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+            resultIntent.putExtra("idResult", resultID.get(0));
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+        }
     }
 }
