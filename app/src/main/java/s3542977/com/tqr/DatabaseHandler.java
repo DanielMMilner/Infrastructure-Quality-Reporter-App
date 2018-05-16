@@ -10,8 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -256,6 +254,20 @@ public class DatabaseHandler implements Serializable {
         return result;
     }
 
+    public ArrayList<String> getResultImageFilePaths(int tableID) {
+        ArrayList<String> result = new ArrayList<>();
+
+        if (isResultEmpty())
+            return result;
+
+        do {
+            if (tableID == REPORTS) {
+                result.add(resultSet.getString(7));
+            }
+        } while (hasNext());
+        return result;
+    }
+
     public void clearTable(int tableID) {
         String table = getTableName(tableID);
 
@@ -413,7 +425,7 @@ public class DatabaseHandler implements Serializable {
 
         String tableName = getTableName(INFRASTRUCTURE);
         optionString.append("Select idInfrastructure FROM ").append(tableName).append(" Where Latitude = ")
-        .append(position.latitude).append(" AND Longitude = ").append(position.longitude).append(";");
+                .append(position.latitude).append(" AND Longitude = ").append(position.longitude).append(";");
 
         resultSet = database.rawQuery(String.valueOf(optionString), null);
 

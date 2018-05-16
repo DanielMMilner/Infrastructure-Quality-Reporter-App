@@ -15,7 +15,6 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -133,7 +132,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         setUpHeatMap();
     }
 
-    private void setUpFilter(){
+    private void setUpFilter() {
         databaseHandler.search(DatabaseHandler.TYPES, null);
         ArrayList<Map<String, String>> types = databaseHandler.getResult(DatabaseHandler.TYPES);
         filterItems = new String[types.size()];
@@ -151,7 +150,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         builder.setTitle("Filter")
                 .setMultiChoiceItems(filterItems, items, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {}
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -182,19 +182,19 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.setOnMarkerClickListener(mClusterManager);
     }
 
-    private void updateMarkersAndHeatMap(){
+    private void updateMarkersAndHeatMap() {
         SparseBooleanArray checkedItemPositions = filterDialog.getListView().getCheckedItemPositions();
         ArrayList<String> allowedTypes = new ArrayList<>();
-        for(int i = 0; i < checkedItemPositions.size(); i++){
-            if(checkedItemPositions.get(i)){
+        for (int i = 0; i < checkedItemPositions.size(); i++) {
+            if (checkedItemPositions.get(i)) {
                 allowedTypes.add(filterItems[i]);
             }
         }
 
         mClusterManager.clearItems();
         visibleMarkers = new ArrayList<>(markers);
-        for (MapMarkers marker: markers) {
-            if(!allowedTypes.contains(marker.getSnippet())){
+        for (MapMarkers marker : markers) {
+            if (!allowedTypes.contains(marker.getSnippet())) {
                 visibleMarkers.remove(marker);
             }
         }
@@ -225,17 +225,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        Log.d("ID", String.valueOf(marker.getPosition()));
         databaseHandler.findInfrastructureReports(marker.getPosition());
-        Toast.makeText(this, "Info window clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Info window clicked", Toast.LENGTH_SHORT).show();
         showResult();
     }
 
     private void showResult() {
-        Intent intent = new Intent(this, DatabaseResultActivity.class);
+        Intent intent = new Intent(this, DatabaseReportsResultsActivity.class);
         ArrayList<String> resultList = new ArrayList<>();
         StringBuilder resultString = new StringBuilder();
         ArrayList<Map<String, String>> result = databaseHandler.getResult(DatabaseHandler.REPORTS);
+        ArrayList<String> resultImageFilePaths = databaseHandler.getResultImageFilePaths(DatabaseHandler.REPORTS);
+
 
         for (Map<String, String> row : result) {
             int i = 0;
@@ -250,6 +251,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         }
 
         intent.putExtra("resultList", resultList);
+        intent.putExtra("resultImageFilePaths", resultImageFilePaths);
+
         startActivity(intent);
     }
 }

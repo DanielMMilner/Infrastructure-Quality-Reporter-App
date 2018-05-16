@@ -40,7 +40,7 @@ public class DatabaseResultActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             Button button = new Button(this);
-            if (resultIdList == null || resultIdList.isEmpty()) {
+            if (resultIdList.isEmpty()) {
                 button.setId(index);
             } else {
                 button.setId(resultIdList.get(index - 1));
