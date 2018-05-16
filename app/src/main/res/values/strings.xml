@@ -51,13 +51,16 @@
     <string name="remove">Remove</string>
     <string name="quality">Quality</string>
     <string name="quality_description">Quality Description</string>
-    <string name="quality_0">Quality: 0</string>
+    <string name="quality_0">Quality Rating: 0</string>
     <string name="employee_id">Employee ID</string>
     <string name="infrastructure_id">Infrastructure ID</string>
-    <string name="connect">Connect</string>
+    <string name="connect">Get Data</string>
     <string name="interference_level">Interference level</string>
     <string name="find_new">Find/New</string>
     <string name="addToDatabaseFailed">Failed to add to database</string>
+    <string name="searchicon">searchIcon</string>
+    <string name="addicon">addIcon</string>
+    <string name="speed_if_applicable">Speed if applicable</string>
     <string-array name="speed_test_sizes_array">
         <item>1MiB</item>
         <item>16MiB</item>

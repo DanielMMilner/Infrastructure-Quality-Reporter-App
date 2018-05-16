@@ -69,7 +69,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void setQualityText() {
-        String text = "Quality: " + String.valueOf(quality);
+        String text = "Quality Rating: " + String.valueOf(quality);
         qualityText.setText(text);
     }
 
@@ -142,6 +142,7 @@ public class ReportActivity extends AppCompatActivity {
                     Bitmap imageBitmap = BitmapFactory.decodeFile(imageFilePath);
                     imageBitmap = Bitmap.createBitmap(imageBitmap);
                     photo.setImageBitmap(imageBitmap);
+                    photo.setRotation(90);
                 } else {
                     photo.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera, this.getTheme()));
                 }
