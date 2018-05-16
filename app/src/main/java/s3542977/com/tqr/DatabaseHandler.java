@@ -6,6 +6,8 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -404,5 +406,21 @@ public class DatabaseHandler implements Serializable {
             resultSet.moveToNext();
             return true;
         }
+    }
+
+    public void findInfrastructureReports(LatLng position) {
+        StringBuilder optionString = new StringBuilder();
+
+        String tableName = getTableName(INFRASTRUCTURE);
+        optionString.append("Select idInfrastructure FROM ").append(tableName).append(" Where Latitude = ")
+        .append(position.latitude).append(" AND Longitude = ").append(position.longitude).append(";");
+
+        resultSet = database.rawQuery(String.valueOf(optionString), null);
+
+        resultSet.moveToFirst();
+        Map<String, String> options = new HashMap<>();
+        options.put("idInfrastructure", String.valueOf(resultSet.getInt(0)));
+
+        search(REPORTS, options);
     }
 }

@@ -175,7 +175,6 @@ public class ReportActivity extends AppCompatActivity {
         String interferenceLevelString = interferenceLevel.getText().toString();
         String speedString = speedTestText.getText().toString();
 
-
         Map<String, String> options = new HashMap<>();
 
         options.put("idEmployee", employeeId);

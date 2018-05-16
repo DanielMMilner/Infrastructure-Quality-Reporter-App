@@ -3,6 +3,7 @@ package s3542977.com.tqr;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -224,6 +225,31 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+//        Log.d("ID", String.valueOf(marker.getPosition()));
+        databaseHandler.findInfrastructureReports(marker.getPosition());
         Toast.makeText(this, "Info window clicked", Toast.LENGTH_SHORT).show();
+        showResult();
+    }
+
+    private void showResult() {
+        Intent intent = new Intent(this, DatabaseResultActivity.class);
+        ArrayList<String> resultList = new ArrayList<>();
+        StringBuilder resultString = new StringBuilder();
+        ArrayList<Map<String, String>> result = databaseHandler.getResult(DatabaseHandler.REPORTS);
+
+        for (Map<String, String> row : result) {
+            int i = 0;
+            for (Map.Entry<String, String> entry : row.entrySet()) {
+                resultString.append(entry.getKey()).append(": ").append(entry.getValue());
+                if (i++ != row.size() - 1) {
+                    resultString.append("\n");
+                }
+            }
+            resultList.add(resultString.toString());
+            resultString.setLength(0);
+        }
+
+        intent.putExtra("resultList", resultList);
+        startActivity(intent);
     }
 }

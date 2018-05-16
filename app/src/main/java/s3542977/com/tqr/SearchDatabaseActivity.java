@@ -262,8 +262,6 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
 
         intent.putExtra("resultList", resultList);
         intent.putExtra("resultIdList", resultIdList);
-
-
         startActivityForResult(intent, REQUEST_ID);
     }
 
