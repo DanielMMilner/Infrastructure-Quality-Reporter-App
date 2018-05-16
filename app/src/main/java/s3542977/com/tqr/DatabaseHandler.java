@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -62,8 +64,10 @@ public class DatabaseHandler implements Serializable {
                         "  `idInfrastructure` INTEGER," +
                         "  `Quality` INTEGER," +
                         "  `InterferenceLevel` VARCHAR(45)," +
+                        "  `Speed` DOUBLE," +
                         "  `Description` VARCHAR(1000)," +
                         "  `ImageFilePath` VARCHAR(100)," +
+                        "  `DateTime` DATETIME," +
                         "  CONSTRAINT `idEmployee`" +
                         "    FOREIGN KEY (`idEmployee`)" +
                         "    REFERENCES `Employees` (`idEmployee`)" +
@@ -170,6 +174,11 @@ public class DatabaseHandler implements Serializable {
                 columns.append(", ");
             }
         }
+        if (tableID == REPORTS) {
+            columns.append(", DateTime");
+            optionString.append(", DateTime('now')");
+        }
+
         columns.append(")");
         optionString.append(");");
 
@@ -218,7 +227,10 @@ public class DatabaseHandler implements Serializable {
                 resultMap.put("idInfrastructure", String.valueOf(resultSet.getInt(2)));
                 resultMap.put("Quality", String.valueOf(resultSet.getInt(3)));
                 resultMap.put("InterferenceLevel", String.valueOf(resultSet.getString(4)));
-                resultMap.put("ImageFilePath", String.valueOf(resultSet.getString(5)));
+                resultMap.put("Speed", String.valueOf(resultSet.getInt(5)));
+                resultMap.put("Description", String.valueOf(resultSet.getString(6)));
+                resultMap.put("ImageFilePath", String.valueOf(resultSet.getString(7)));
+                resultMap.put("DateTime", String.valueOf(resultSet.getString(8)));
             } else if (tableID == TYPES) {
                 resultMap.put("Type", String.valueOf(resultSet.getString(0)));
             }
@@ -272,6 +284,7 @@ public class DatabaseHandler implements Serializable {
             for (int i = 0; i < amount; i++) {
                 int quality = generator.nextInt(101);
                 int interferenceLevel = generator.nextInt(101);
+                double speed = 100 * generator.nextDouble();
                 int numEmployees = (int) DatabaseUtils.queryNumEntries(database, "Employees");
                 int numInfrastructure = (int) DatabaseUtils.queryNumEntries(database, "Infrastructure");
                 int idEmployee = generator.nextInt(numEmployees + 1) + 1;
@@ -282,6 +295,7 @@ public class DatabaseHandler implements Serializable {
                 options.put("idInfrastructure", String.valueOf(idInfrastructure));
                 options.put("Quality", String.valueOf(quality));
                 options.put("InterferenceLevel", String.valueOf(interferenceLevel));
+                options.put("Speed", String.valueOf(speed));
                 options.put("Description", "Dummy Data");
                 options.put("ImageFilePath", "");
 

@@ -24,6 +24,8 @@ public class ReportActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_EMPLOYEE_ID = 2;
     static final int REQUEST_INFRASTRUCTURE_ID = 3;
+    static final int REQUEST_SPEED_TEST = 4;
+
 
     int quality = 0;
     TextView qualityText;
@@ -31,6 +33,7 @@ public class ReportActivity extends AppCompatActivity {
     EditText employeeIdText;
     EditText infrastructureIdText;
     EditText interferenceLevel;
+    EditText speedTestText;
     ImageView photo;
     DatabaseHandler databaseHandler;
     String imageFilePath = "";
@@ -45,6 +48,7 @@ public class ReportActivity extends AppCompatActivity {
         infrastructureIdText = findViewById(R.id.infrastructureID);
         interferenceLevel = findViewById(R.id.interferenceLevel);
         photo = findViewById(R.id.photoTaken);
+        speedTestText = findViewById(R.id.speedTestText);
 
         databaseHandler = new DatabaseHandler(this);
 
@@ -100,6 +104,11 @@ public class ReportActivity extends AppCompatActivity {
                 intent.putExtra("returnData", true);
                 startActivityForResult(intent, REQUEST_INFRASTRUCTURE_ID);
                 break;
+            case (R.id.getSpeedButton):
+                intent = new Intent(this, SpeedTestActivity.class);
+                intent.putExtra("returnData", true);
+                startActivityForResult(intent, REQUEST_SPEED_TEST);
+                break;
             case (R.id.getInterferenceButton):
                 break;
         }
@@ -147,6 +156,13 @@ public class ReportActivity extends AppCompatActivity {
                     photo.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera, this.getTheme()));
                 }
                 break;
+            case (REQUEST_SPEED_TEST):
+                if (resultCode == Activity.RESULT_OK) {
+                    double returnValueSpeed = data.getDoubleExtra("speedResult", 0);
+                    Log.d("returnValueSpeed Report", String.valueOf(returnValueSpeed));
+                    speedTestText.setText(String.valueOf(returnValueSpeed));
+                }
+                break;
             default:
                 Log.d("Result", "Fail");
         }
@@ -157,6 +173,8 @@ public class ReportActivity extends AppCompatActivity {
         String employeeId = employeeIdText.getText().toString();
         String infrastructureId = infrastructureIdText.getText().toString();
         String interferenceLevelString = interferenceLevel.getText().toString();
+        String speedString = speedTestText.getText().toString();
+
 
         Map<String, String> options = new HashMap<>();
 
@@ -164,6 +182,7 @@ public class ReportActivity extends AppCompatActivity {
         options.put("idInfrastructure", infrastructureId);
         options.put("Quality", String.valueOf(quality));
         options.put("InterferenceLevel", interferenceLevelString);
+        options.put("Speed", speedString);
         options.put("Description", description);
         options.put("ImageFilePath", imageFilePath);
 

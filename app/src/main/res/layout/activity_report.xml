@@ -233,6 +233,7 @@
                 android:layout_width="137dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
+                android:onClick="buttonPressed"
                 android:text="@string/run_speed_test"
                 app:layout_constraintStart_toEndOf="@+id/speedTestText"
                 app:layout_constraintTop_toTopOf="@+id/speedTestText" />

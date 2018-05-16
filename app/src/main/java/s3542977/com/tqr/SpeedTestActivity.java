@@ -1,5 +1,7 @@
 package s3542977.com.tqr;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
     private TextView textView;
     private ProgressBar speedTestProgress;
     private Spinner spinner;
+    private double speed;
     int spinnerPosition;
 
     @Override
@@ -103,7 +106,6 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
         int progress = 0;
         private double seconds;
         private double bits;
-        private double speed;
 
         /**
          * Before starting background thread Show Progress Bar Dialog
@@ -144,10 +146,21 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
                 }
                 publishProgress();
                 input.close();
+                returnResultIfRequired();
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }
             return null;
+        }
+
+        private void returnResultIfRequired() {
+            if(getIntent().getBooleanExtra("returnData", false)){
+                Intent resultIntent = new Intent();
+
+                resultIntent.putExtra("speedResult", speed);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
         }
 
         /**
