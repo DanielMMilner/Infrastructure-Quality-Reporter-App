@@ -63,6 +63,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     public boolean onCreateOptionsMenu(Menu menu) {
         //https://developer.android.com/training/appbar/setting-up
         getMenuInflater().inflate(R.menu.maps, menu);
+        menu.findItem(R.id.action_toggle_markers).setChecked(true);
         return true;
     }
 
@@ -130,6 +131,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
         setUpMarkers();
         setUpHeatMap();
+
+        mClusterManager.addItems(visibleMarkers);
+
     }
 
     private void setUpFilter() {
@@ -226,7 +230,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     @Override
     public void onInfoWindowClick(Marker marker) {
         databaseHandler.findInfrastructureReports(marker.getPosition());
-//        Toast.makeText(this, "Info window clicked", Toast.LENGTH_SHORT).show();
         showResult();
     }
 
