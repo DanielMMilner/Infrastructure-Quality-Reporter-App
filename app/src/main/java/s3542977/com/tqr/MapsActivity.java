@@ -88,7 +88,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     mClusterManager.clearItems();
                     item.setChecked(false);
                 } else {
-                    mClusterManager.addItems(visibleMarkers);
+                    if(visibleMarkers != null)
+                        mClusterManager.addItems(visibleMarkers);
                     item.setChecked(true);
                 }
                 return true;
@@ -132,7 +133,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         setUpMarkers();
         setUpHeatMap();
 
-        mClusterManager.addItems(visibleMarkers);
+        if(visibleMarkers != null)
+            mClusterManager.addItems(visibleMarkers);
 
     }
 
