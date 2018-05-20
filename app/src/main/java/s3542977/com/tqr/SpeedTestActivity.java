@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
     private Spinner spinner;
     private double speed;
     int spinnerPosition;
+    private ImageView speedDial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
         speedTestProgress = findViewById(R.id.speedTestProgress);
         spinner = findViewById(R.id.testSizeSpinner);
         spinnerPosition = 0;
+        speedDial = findViewById(R.id.speedDial);
 
         //https://developer.android.com/guide/topics/ui/controls/spinner
 
@@ -154,7 +157,7 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
         }
 
         private void returnResultIfRequired() {
-            if(getIntent().getBooleanExtra("returnData", false)){
+            if (getIntent().getBooleanExtra("returnData", false)) {
                 Intent resultIntent = new Intent();
 
                 resultIntent.putExtra("speedResult", speed);
@@ -184,6 +187,12 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
             seconds = (endTime - startTime) / 1000.0;
             bits = total * 8;
             speed = bits / seconds / 1000000;
+
+            double speedPercent = speed/100;
+
+            double rotation = 250*speedPercent;
+
+            speedDial.setRotation((float) (-125 + rotation));
 
             temp = "Downloaded " + total + " bytes \nTime: " +
                     String.valueOf(endTime - startTime) + "ms\nSpeed: " + String.format(Locale.UK, "%.2f", speed) + "Mbps";
