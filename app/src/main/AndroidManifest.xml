@@ -71,10 +71,18 @@
         <activity
             android:name=".RemoveFromDatabaseActivity"
             android:parentActivityName=".DatabaseViewer" />
-        <activity android:name=".InfrastructureHistoryActivity" />
-        <activity android:name=".DatabaseResultActivity" />
-        <activity android:name=".DatabaseReportsResultsActivity" />
-        <activity android:name=".BluetoothActivity"></activity>
+        <activity
+            android:name=".InfrastructureHistoryActivity"
+            android:parentActivityName=".MapsActivity" />
+        <activity
+            android:name=".DatabaseResultActivity"
+            android:parentActivityName=".SearchDatabaseActivity" />
+        <activity
+            android:name=".DatabaseReportsResultsActivity"
+            android:parentActivityName=".SearchDatabaseActivity" />
+        <activity
+            android:name=".BluetoothActivity"
+            android:parentActivityName=".ReportActivity" />
     </application>
 
 </manifest>
