@@ -181,10 +181,10 @@ public class SearchDatabaseActivity extends AppCompatActivity implements Adapter
             latitude = lastKnownLocation.getLatitude();
             longitude = lastKnownLocation.getLongitude();
         }
-        double maxLongitude = longitude + 0.0002;
-        double maxLatitude = latitude + 0.0002;
-        double minLongitude = longitude - 0.0002;
-        double minLatitude = latitude - 0.0002;
+        double maxLongitude = longitude + 0.0004;
+        double maxLatitude = latitude + 0.0004;
+        double minLongitude = longitude - 0.0004;
+        double minLatitude = latitude - 0.0004;
 
         databaseHandler.searchLatLngInRange(maxLatitude, maxLongitude, minLatitude, minLongitude);
 
