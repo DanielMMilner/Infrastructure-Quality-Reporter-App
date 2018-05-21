@@ -113,10 +113,6 @@ public class DatabaseHandler implements Serializable {
             }
         }
 
-//        if (tableID == REPORTS) {
-//            optionString.append(" AND idEmployee = ").append(options.get("idEmployee"));
-//        }
-
         optionString.append(";");
 
         Log.d("Query", String.valueOf(optionString));
