@@ -53,6 +53,8 @@ public class SpeedTestActivity extends AppCompatActivity implements AdapterView.
     public void runTest(View view) {
         String file_url;
 
+        speedTestProgress.setVisibility(View.VISIBLE);
+
         file_url = (String) spinner.getItemAtPosition(spinnerPosition);
 
         switch (spinnerPosition) {
