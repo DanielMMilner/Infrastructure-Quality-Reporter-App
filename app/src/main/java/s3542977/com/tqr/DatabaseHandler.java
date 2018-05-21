@@ -90,7 +90,14 @@ public class DatabaseHandler implements Serializable {
             return;
         }
 
-        optionString.append("Select * FROM ").append(tableName).append(" Where ");
+        optionString.append("Select * FROM ").append(tableName);
+
+        if (tableID == REPORTS) {
+            optionString.append(" NATURAL JOIN Employees ");
+        }
+
+        optionString.append(" Where ");
+
         int i = 0;
         for (Map.Entry<String, String> entry : options.entrySet()) {
             optionString.append(entry.getKey());
@@ -105,6 +112,11 @@ public class DatabaseHandler implements Serializable {
                 optionString.append(" OR ");
             }
         }
+
+//        if (tableID == REPORTS) {
+//            optionString.append(" AND idEmployee = ").append(options.get("idEmployee"));
+//        }
+
         optionString.append(";");
 
         Log.d("Query", String.valueOf(optionString));
@@ -206,25 +218,26 @@ public class DatabaseHandler implements Serializable {
         do {
             Map<String, String> resultMap = new HashMap<>();
             if (tableID == EMPLOYEES) {
-                resultMap.put("idEmployee", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("Employee ID", String.valueOf(resultSet.getInt(0)));
                 resultMap.put("Name", String.valueOf(resultSet.getString(1)));
                 resultMap.put("Phone", String.valueOf(resultSet.getString(2)));
             } else if (tableID == INFRASTRUCTURE) {
-                resultMap.put("idInfrastructure", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("Infrastructure ID", String.valueOf(resultSet.getInt(0)));
                 resultMap.put("Type", String.valueOf(resultSet.getString(1)));
                 resultMap.put("Latitude", String.valueOf(resultSet.getDouble(2)));
                 resultMap.put("Longitude", String.valueOf(resultSet.getDouble(3)));
                 resultMap.put("Quality", String.valueOf(resultSet.getInt(4)));
             } else if (tableID == REPORTS) {
-                resultMap.put("idReports", String.valueOf(resultSet.getInt(0)));
-                resultMap.put("idEmployee", String.valueOf(resultSet.getInt(1)));
-                resultMap.put("idInfrastructure", String.valueOf(resultSet.getInt(2)));
+                resultMap.put("Report ID", String.valueOf(resultSet.getInt(0)));
+                resultMap.put("Employee ID", String.valueOf(resultSet.getInt(1)));
+                resultMap.put("Infrastructure ID", String.valueOf(resultSet.getInt(2)));
                 resultMap.put("Quality", String.valueOf(resultSet.getInt(3)));
                 resultMap.put("InterferenceLevel", String.valueOf(resultSet.getString(4)));
                 resultMap.put("Speed", String.valueOf(resultSet.getInt(5)));
                 resultMap.put("Description", String.valueOf(resultSet.getString(6)));
-                resultMap.put("ImageFilePath", String.valueOf(resultSet.getString(7)));
                 resultMap.put("DateTime", String.valueOf(resultSet.getString(8)));
+                resultMap.put("Employee Name", String.valueOf(resultSet.getString(9)));
+                resultMap.put("Phone", String.valueOf(resultSet.getString(10)));
             } else if (tableID == TYPES) {
                 resultMap.put("Type", String.valueOf(resultSet.getString(0)));
             }
