@@ -2,9 +2,11 @@ package s3542977.com.tqr;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,9 +62,12 @@ public class DatabaseReportsResultsActivity extends AppCompatActivity {
             linearLayout.addView(textView, params);
             linearLayout.addView(imageView, params);
 
-            ImageView divider = new ImageView(this);
-            divider.setImageResource(R.drawable.amu_bubble_mask);
-            linearLayout.addView(divider, params);
+            View view = new View(this);
+            view.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    30));
+            view.setBackgroundColor(Color.BLACK);
+            linearLayout.addView(view);
         }
     }
 }
