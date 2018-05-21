@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -127,7 +128,12 @@ public class ReportActivity extends AppCompatActivity {
         Log.d("takePicture", "picture will be saved at: " + imageFilePath);
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+
+        Uri apkURI = FileProvider.getUriForFile(this,this.getApplicationContext()
+                        .getPackageName() + ".provider", image);
+
+
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, apkURI);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -174,9 +180,23 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void submitReport(View view) {
-        String description = descriptionText.getText().toString();
         String employeeId = employeeIdText.getText().toString();
+        if (employeeId.isEmpty()) {
+            errorMessage("employeeId");
+            return;
+        }
         String infrastructureId = infrastructureIdText.getText().toString();
+        if (infrastructureId.isEmpty()) {
+            errorMessage("infrastructureId");
+            return;
+        }
+
+        String description = descriptionText.getText().toString();
+        if (description.isEmpty()) {
+            errorMessage("description");
+            return;
+        }
+
         String interferenceLevelString = interferenceLevel.getText().toString();
         String speedString = speedTestText.getText().toString();
 
@@ -202,5 +222,9 @@ public class ReportActivity extends AppCompatActivity {
         imageFilePath = "";
 
         Toast.makeText(this, "Successfully added to database", Toast.LENGTH_LONG).show();
+    }
+
+    private void errorMessage(String desc){
+        Toast.makeText(this, "Please add a " + desc, Toast.LENGTH_LONG).show();
     }
 }

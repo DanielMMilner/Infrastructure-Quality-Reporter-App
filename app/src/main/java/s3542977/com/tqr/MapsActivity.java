@@ -122,9 +122,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.setMyLocationEnabled(true);
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        LatLng currentLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        if(lastKnownLocation != null){
+            LatLng currentLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        }
 
         mMap.setOnInfoWindowClickListener(this);
 
