@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ReportActivity extends AppCompatActivity {
@@ -129,8 +130,8 @@ public class ReportActivity extends AppCompatActivity {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        Uri apkURI = FileProvider.getUriForFile(this,this.getApplicationContext()
-                        .getPackageName() + ".provider", image);
+        Uri apkURI = FileProvider.getUriForFile(this, this.getApplicationContext()
+                .getPackageName() + ".provider", image);
 
 
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, apkURI);
@@ -171,7 +172,7 @@ public class ReportActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     double returnValueSpeed = data.getDoubleExtra("speedResult", 0);
                     Log.d("returnValueSpeed Report", String.valueOf(returnValueSpeed));
-                    speedTestText.setText(String.valueOf(returnValueSpeed));
+                    speedTestText.setText(String.format(Locale.UK, "%.2f", returnValueSpeed));
                 }
                 break;
             default:
@@ -182,18 +183,18 @@ public class ReportActivity extends AppCompatActivity {
     public void submitReport(View view) {
         String employeeId = employeeIdText.getText().toString();
         if (employeeId.isEmpty()) {
-            errorMessage("employeeId");
+            errorMessage("Employee ID");
             return;
         }
         String infrastructureId = infrastructureIdText.getText().toString();
         if (infrastructureId.isEmpty()) {
-            errorMessage("infrastructureId");
+            errorMessage("Infrastructure ID");
             return;
         }
 
         String description = descriptionText.getText().toString();
         if (description.isEmpty()) {
-            errorMessage("description");
+            errorMessage("Description");
             return;
         }
 
@@ -224,7 +225,7 @@ public class ReportActivity extends AppCompatActivity {
         Toast.makeText(this, "Successfully added to database", Toast.LENGTH_LONG).show();
     }
 
-    private void errorMessage(String desc){
+    private void errorMessage(String desc) {
         Toast.makeText(this, "Please add a " + desc, Toast.LENGTH_LONG).show();
     }
 }

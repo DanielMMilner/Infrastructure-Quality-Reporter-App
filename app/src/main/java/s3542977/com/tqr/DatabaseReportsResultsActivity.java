@@ -22,7 +22,6 @@ public class DatabaseReportsResultsActivity extends AppCompatActivity {
         ArrayList<String> resultList = getIntent().getStringArrayListExtra("resultList");
         ArrayList<String> resultImageFilePaths = getIntent().getStringArrayListExtra("resultImageFilePaths");
 
-
         if (resultList == null || resultList.isEmpty()) {
             Log.d("Result", "resultList is empty");
             return;
@@ -54,6 +53,8 @@ public class DatabaseReportsResultsActivity extends AppCompatActivity {
                     imageBitmap = Bitmap.createBitmap(imageBitmap);
                     imageView.setImageBitmap(imageBitmap);
                     imageView.setRotation(90);
+                    imageView.setPadding(0, 250, 0, 150);
+                    imageView.setAdjustViewBounds(true);
                 }
             }
             linearLayout.addView(textView, params);

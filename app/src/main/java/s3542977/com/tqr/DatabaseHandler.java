@@ -27,12 +27,6 @@ public class DatabaseHandler implements Serializable {
 
     DatabaseHandler(Context context) {
         database = context.openOrCreateDatabase("database", MODE_PRIVATE, null);
-
-//        database.execSQL("DROP TABLE Reports;");
-//        database.execSQL("DROP TABLE Employees;");
-//        database.execSQL("DROP TABLE Infrastructure;");
-//        database.execSQL("DROP TABLE Type;");
-
         String setUpQuery =
                 "CREATE TABLE IF NOT EXISTS Type(" +
                         "  idType VARCHAR(45) PRIMARY KEY);";
@@ -324,6 +318,9 @@ public class DatabaseHandler implements Serializable {
 
                 resultSet = database.rawQuery("SELECT * FROM Type ORDER BY RANDOM() LIMIT 1;", null);
                 resultSet.moveToFirst();
+                if (resultSet.getCount() == 0) {
+                    return;
+                }
                 String type = resultSet.getString(0);
 
                 Map<String, String> options = new HashMap<>();
